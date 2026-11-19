@@ -1,0 +1,135 @@
+seg_id,route_id,seq,length_m,covered_m,uncovered_m,shelter_source,nearest_station,nearest_station_name,nearest_station_m,rain_freq,rain_per_m,rain_score_flora
+R01-S01,R01,1,40.1,0.0,40.1,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1072,0.0168,0.0168,0.674
+R01-S02,R01,2,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1080,0.0168,0.0168,0.84
+R01-S03,R01,3,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1104,0.0168,0.0168,0.84
+R01-S04,R01,4,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1110,0.0168,0.0168,0.84
+R01-S05,R01,5,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1146,0.0168,0.0168,0.84
+R01-S06,R01,6,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1180,0.0168,0.0168,0.84
+R01-S07,R01,7,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1224,0.0168,0.0168,0.84
+R01-S08,R01,8,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1268,0.0168,0.0168,0.84
+R01-S09,R01,9,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1308,0.0168,0.0168,0.84
+R01-S10,R01,10,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1304,0.0168,0.0168,0.84
+R01-S11,R01,11,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1283,0.0168,0.0168,0.84
+R01-S12,R01,12,21.0,0.0,21.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1268,0.0168,0.0168,0.353
+R01-S13,R01,13,33.8,0.0,33.8,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1280,0.0168,0.0168,0.568
+R02-S01,R02,1,5.8,0.0,5.8,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1253,0.0169,0.0169,0.098
+R02-S02,R02,2,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1221,0.0169,0.0169,0.845
+R02-S03,R02,3,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1174,0.0169,0.0169,0.845
+R02-S04,R02,4,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1125,0.0169,0.0169,0.845
+R02-S05,R02,5,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1080,0.0168,0.0168,0.84
+R02-S06,R02,6,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1054,0.0168,0.0168,0.84
+R02-S07,R02,7,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1053,0.0168,0.0168,0.84
+R02-S08,R02,8,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1053,0.0168,0.0168,0.84
+R02-S09,R02,9,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1055,0.0168,0.0168,0.84
+R02-S10,R02,10,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1059,0.0168,0.0168,0.84
+R02-S11,R02,11,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1078,0.0168,0.0168,0.84
+R02-S12,R02,12,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1100,0.0168,0.0168,0.84
+R02-S13,R02,13,19.9,0.0,19.9,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1108,0.0168,0.0168,0.334
+R02-S14,R02,14,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1095,0.0167,0.0167,0.835
+R02-S15,R02,15,11.8,0.0,11.8,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1095,0.0167,0.0167,0.197
+R03-S01,R03,1,3.7,0.0,3.7,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,907,0.0167,0.0167,0.062
+R03-S02,R03,2,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,939,0.0167,0.0167,0.835
+R03-S03,R03,3,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,978,0.0168,0.0168,0.84
+R03-S04,R03,4,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1037,0.0168,0.0168,0.84
+R03-S05,R03,5,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1080,0.0168,0.0168,0.84
+R03-S06,R03,6,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1097,0.0169,0.0169,0.845
+R03-S07,R03,7,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1109,0.0169,0.0169,0.845
+R03-S08,R03,8,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1135,0.0169,0.0169,0.845
+R03-S09,R03,9,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1182,0.0169,0.0169,0.845
+R03-S10,R03,10,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1222,0.017,0.017,0.85
+R03-S11,R03,11,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1264,0.017,0.017,0.85
+R03-S12,R03,12,50.0,13.0,37.0,LTA linkway (partial),S08,Upper Thomson Road,1267,0.017,0.0126,0.629
+R03-S13,R03,13,37.0,32.3,4.7,LTA linkway (partial),S08,Upper Thomson Road,1232,0.017,0.0022,0.08
+R03-S14,R03,14,8.1,0.0,8.1,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,1217,0.017,0.017,0.138
+R04-S01,R04,1,4.2,0.0,4.2,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,834,0.0169,0.0169,0.071
+R04-S02,R04,2,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,862,0.017,0.017,0.85
+R04-S03,R04,3,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,913,0.0171,0.0171,0.855
+R04-S04,R04,4,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,960,0.0171,0.0171,0.855
+R04-S05,R04,5,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,1010,0.0172,0.0172,0.86
+R04-S06,R04,6,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,1055,0.0173,0.0173,0.865
+R04-S07,R04,7,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,1105,0.0174,0.0174,0.87
+R04-S08,R04,8,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,1164,0.0176,0.0176,0.88
+R04-S09,R04,9,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,1190,0.0176,0.0176,0.88
+R04-S10,R04,10,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,1190,0.0176,0.0176,0.88
+R04-S11,R04,11,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,1192,0.0176,0.0176,0.88
+R04-S12,R04,12,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,1197,0.0175,0.0175,0.875
+R04-S13,R04,13,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,1225,0.0176,0.0176,0.88
+R04-S14,R04,14,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,1266,0.0176,0.0176,0.88
+R04-S15,R04,15,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,1323,0.0177,0.0177,0.885
+R04-S16,R04,16,9.0,0.0,9.0,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,1350,0.0178,0.0178,0.16
+R04-S17,R04,17,12.4,0.0,12.4,No LTA linkway; HDB/Town Council shelters not mapped,S08,Upper Thomson Road,1361,0.0178,0.0178,0.221
+R05-S01,R05,1,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,1257,0.0192,0.0192,0.96
+R05-S02,R05,2,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,1254,0.0191,0.0191,0.955
+R05-S03,R05,3,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1224,0.019,0.019,0.95
+R05-S04,R05,4,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1184,0.0189,0.0189,0.945
+R05-S05,R05,5,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1136,0.0188,0.0188,0.94
+R05-S06,R05,6,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1082,0.0186,0.0186,0.93
+R05-S07,R05,7,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1029,0.0185,0.0185,0.925
+R05-S08,R05,8,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,981,0.0183,0.0183,0.915
+R05-S09,R05,9,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,941,0.0181,0.0181,0.905
+R05-S10,R05,10,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,904,0.018,0.018,0.9
+R05-S11,R05,11,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,885,0.0179,0.0179,0.895
+R05-S12,R05,12,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,826,0.0176,0.0176,0.88
+R05-S13,R05,13,6.8,0.0,6.8,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,802,0.0175,0.0175,0.119
+R05-S14,R05,14,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,754,0.0173,0.0173,0.865
+R05-S15,R05,15,20.1,0.0,20.1,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,734,0.0173,0.0173,0.348
+R06-S01,R06,1,8.4,4.4,4.0,LTA linkway (partial),S216,S216,1041,0.0204,0.0097,0.082
+R06-S02,R06,2,50.0,32.7,17.3,LTA linkway (partial),S216,S216,1010,0.0205,0.0071,0.355
+R06-S03,R06,3,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,976,0.0206,0.0206,1.03
+R06-S04,R06,4,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,915,0.0208,0.0208,1.04
+R06-S05,R06,5,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,871,0.0209,0.0209,1.045
+R06-S06,R06,6,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,827,0.0211,0.0211,1.055
+R06-S07,R06,7,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,771,0.0213,0.0213,1.065
+R06-S08,R06,8,50.0,14.9,35.1,LTA linkway (partial),S216,S216,723,0.0215,0.0151,0.755
+R06-S09,R06,9,11.9,9.3,2.6,LTA linkway (partial),S216,S216,701,0.0216,0.0047,0.056
+R06-S10,R06,10,30.2,1.6,28.6,LTA linkway (partial),S216,S216,689,0.0216,0.0204,0.618
+R07-S01,R07,1,5.9,0.0,5.9,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,304,0.0161,0.0161,0.095
+R07-S02,R07,2,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,322,0.0161,0.0161,0.805
+R07-S03,R07,3,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,366,0.0163,0.0163,0.815
+R07-S04,R07,4,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,413,0.0164,0.0164,0.82
+R07-S05,R07,5,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,440,0.0165,0.0165,0.825
+R07-S06,R07,6,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,442,0.0165,0.0165,0.825
+R07-S07,R07,7,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,440,0.0165,0.0165,0.825
+R07-S08,R07,8,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,445,0.0165,0.0165,0.825
+R07-S09,R07,9,50.0,50.0,0.0,OSM covered=yes,S109,Ang Mo Kio Avenue 5,460,0.0165,0.0,0.0
+R07-S10,R07,10,48.5,48.5,0.0,OSM covered=yes,S109,Ang Mo Kio Avenue 5,504,0.0167,0.0,0.0
+R07-S11,R07,11,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,574,0.017,0.017,0.85
+R07-S12,R07,12,2.7,0.0,2.7,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,576,0.017,0.017,0.046
+R08-S01,R08,1,11.3,6.6,4.7,LTA linkway (partial),S109,Ang Mo Kio Avenue 5,475,0.0166,0.0069,0.078
+R08-S02,R08,2,50.0,32.4,17.6,LTA linkway (partial),S109,Ang Mo Kio Avenue 5,502,0.0167,0.0059,0.294
+R08-S03,R08,3,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,530,0.0168,0.0168,0.84
+R08-S04,R08,4,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,570,0.017,0.017,0.85
+R08-S05,R08,5,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,620,0.0172,0.0172,0.86
+R08-S06,R08,6,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,658,0.0173,0.0173,0.865
+R08-S07,R08,7,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,708,0.0175,0.0175,0.875
+R08-S08,R08,8,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,756,0.0177,0.0177,0.885
+R08-S09,R08,9,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,801,0.0179,0.0179,0.895
+R08-S10,R08,10,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,844,0.018,0.018,0.9
+R08-S11,R08,11,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,868,0.018,0.018,0.9
+R08-S12,R08,12,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,897,0.0181,0.0181,0.905
+R08-S13,R08,13,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,907,0.0181,0.0181,0.905
+R08-S14,R08,14,35.8,0.0,35.8,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,922,0.018,0.018,0.644
+R08-S15,R08,15,9.1,0.0,9.1,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,937,0.018,0.018,0.164
+R09-S01,R09,1,5.7,0.0,5.7,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1180,0.0193,0.0193,0.11
+R09-S02,R09,2,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1157,0.0193,0.0193,0.965
+R09-S03,R09,3,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1117,0.0192,0.0192,0.96
+R09-S04,R09,4,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1082,0.0191,0.0191,0.955
+R09-S05,R09,5,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1046,0.019,0.019,0.95
+R09-S06,R09,6,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1005,0.0187,0.0187,0.935
+R09-S07,R09,7,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,966,0.0185,0.0185,0.925
+R09-S08,R09,8,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,927,0.0183,0.0183,0.915
+R09-S09,R09,9,38.5,0.0,38.5,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,897,0.0181,0.0181,0.697
+R09-S10,R09,10,18.8,0.0,18.8,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,859,0.0179,0.0179,0.337
+R10-S01,R10,1,3.1,0.0,3.1,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,686,0.0216,0.0216,0.067
+R10-S02,R10,2,50.0,50.0,0.0,OSM covered=yes,S216,S216,715,0.0215,0.0,0.0
+R10-S03,R10,3,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,760,0.0213,0.0213,1.065
+R10-S04,R10,4,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,814,0.021,0.021,1.05
+R10-S05,R10,5,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,847,0.0209,0.0209,1.045
+R10-S06,R10,6,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,891,0.0207,0.0207,1.035
+R10-S07,R10,7,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,937,0.0205,0.0205,1.025
+R10-S08,R10,8,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,989,0.0202,0.0202,1.01
+R10-S09,R10,9,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,1043,0.0199,0.0199,0.995
+R10-S10,R10,10,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S216,S216,1074,0.0197,0.0197,0.985
+R10-S11,R10,11,50.0,0.0,50.0,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1115,0.0195,0.0195,0.975
+R10-S12,R10,12,30.6,0.0,30.6,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1094,0.0193,0.0193,0.591
+R10-S13,R10,13,40.6,0.0,40.6,No LTA linkway; HDB/Town Council shelters not mapped,S109,Ang Mo Kio Avenue 5,1041,0.019,0.019,0.771

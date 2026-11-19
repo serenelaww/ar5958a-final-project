@@ -1,0 +1,1573 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where Do Seniors Walk in the Sun? · AR5958A Group 5</title>
+<meta name="description" content="Ranking unsheltered footpath segments on seniors' walking routes in Ang Mo Kio by sun and rain exposure, using street-view segmentation and open data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
+<style>
+:root{
+  --navy:#2B4C6D; --blue:#3E6FA8; --sky:#C5DAEC; --sun:#EDCF7B; --rose:#EBBAB4; --heat:#E98A5F;
+  --bg:#F8F7F2; --card:#FFFFFF; --ink:#1F2F40; --muted:#5A6B7C; --line:#DCD9CF;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",Arial,sans-serif;font-size:12pt;line-height:1.5}
+a{color:var(--blue)}
+.wrap{max-width:780px;margin:0 auto;padding:0 20px}
+.wide{max-width:1100px;margin:0 auto;padding:0 20px}
+header.hero{background:var(--navy);color:#fff;padding:72px 0 56px}
+.hero .kicker{color:var(--sun);letter-spacing:.14em;font-size:.8rem;font-weight:700;text-transform:uppercase}
+.hero h1{font-size:clamp(2rem,5vw,3.1rem);line-height:1.12;margin:.4em 0 .35em}
+.hero p.lede{font-size:1.15rem;max-width:640px;color:#E4ECF5;margin:0 0 1.4em}
+.hero .team{font-size:.9rem;color:#C9D6E4}
+.hero .links{margin-top:1.4em;display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-block;padding:9px 16px;border-radius:999px;background:var(--sun);color:var(--navy);font-weight:700;text-decoration:none;font-size:.95rem}
+.btn.ghost{background:transparent;color:#fff;border:1.5px solid #9FB4CB}
+nav.toc{position:sticky;top:0;z-index:1000;background:rgba(248,247,242,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(4px)}
+nav.toc ul{list-style:none;margin:0 auto;padding:10px 20px;display:flex;gap:18px;overflow-x:auto;max-width:1100px;font-size:.9rem;white-space:nowrap}
+nav.toc a{text-decoration:none;color:var(--navy);font-weight:600}
+section{padding:56px 0 8px}
+h2{font-size:1.75rem;line-height:1.2;color:var(--navy);margin:0 0 .3em}
+h3{font-size:1.2rem;color:var(--navy);margin:1.6em 0 .3em}
+.kick{color:var(--blue);letter-spacing:.14em;font-size:.78rem;font-weight:700;text-transform:uppercase;margin-bottom:.5em}
+p{margin:0 0 1em}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:1.2em 0}
+.stat{border-radius:16px;padding:18px 20px}
+.stat b{display:block;font-size:2rem;line-height:1.1;color:var(--navy)}
+.stat span{font-size:.92rem}
+.c-sky{background:var(--sky)}.c-sun{background:var(--sun)}.c-rose{background:var(--rose)}.c-heat{background:var(--heat)}
+.callout{border-left:5px solid var(--heat);background:#fff;padding:14px 18px;border-radius:0 12px 12px 0;margin:1.2em 0}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:1.4em 0}
+.step{border-radius:14px;padding:14px 16px;font-size:.92rem}
+.step .n{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+.step h4{margin:.2em 0 .3em;font-size:1.05rem;color:var(--navy)}
+.step.ai{background:var(--heat)}.step.ai .n{color:var(--navy)}
+.step.dark{background:var(--navy);color:#fff}.step.dark h4{color:#fff}.step.dark .n{color:var(--sun)}
+figure{margin:1.6em 0}
+figure img{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);background:#fff;display:block}
+figcaption{font-size:.88rem;color:var(--muted);margin-top:.5em}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:1em 0;background:#fff}
+th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--navy);color:#fff;font-weight:600}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.85rem;color:var(--muted);margin-top:.4em;align-items:center}
+.ramp{height:10px;width:220px;border-radius:5px;background:linear-gradient(90deg,#3E6FA8,#C5DAEC,#EDCF7B,#E98A5F)}
+.sw{display:inline-block;width:22px;height:5px;border-radius:3px;vertical-align:middle;margin-right:5px}
+#map{height:600px;border-radius:14px;border:1px solid var(--line);background:#EEEBE3}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:.8em 0;font-size:.92rem}
+.controls select,.controls input{font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.pill{display:inline-block;padding:1px 10px;border-radius:999px;font-size:.82rem;font-weight:700}
+.pill.High{background:var(--heat)}.pill.Medium{background:var(--sun)}.pill.Low{background:var(--sky)}
+.mapgrid{display:grid;grid-template-columns:1fr 330px;gap:12px}
+#panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:.9rem;height:600px;overflow:auto}
+#panel h4{margin:0 0 .2em;color:var(--navy);font-size:1.15rem}
+#panel .sub{color:var(--muted);font-size:.85rem;margin-bottom:.6em}
+#panel .hint{color:var(--muted)}
+#panel dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:.6em 0}
+#panel dt{color:var(--muted)}#panel dd{margin:0;font-weight:600;text-align:right}
+#panel ul.why{margin:.3em 0 .8em;padding-left:1.1em}
+#panel label{display:block;margin:.45em 0 .15em;font-weight:600;color:var(--navy);font-size:.85rem}
+#panel select,#panel textarea{width:100%;font:inherit;font-size:.9rem;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff}
+#panel textarea{min-height:64px;resize:vertical}
+#panel .nav{display:flex;gap:6px;margin:.8em 0}
+#panel .nav button{flex:1}
+#panel .links a{margin-right:10px;font-size:.85rem}
+#panel .saved{color:#3C7A4B;font-size:.8rem;min-height:1.2em}
+button.tool{font:inherit;font-size:.9rem;font-weight:700;padding:7px 14px;border-radius:999px;border:0;background:var(--navy);color:#fff;cursor:pointer}
+button.tool.ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
+button.tool:disabled{opacity:.4;cursor:default}
+.dot{display:inline-block;width:12px;height:12px;vertical-align:middle;margin-right:5px;border:2px solid #2B4C6D;background:#FAF8F3;border-radius:50%}
+.dot.d{border-radius:2px;background:#EDCF7B}
+.dot.ck{width:16px;height:16px;background:#3C7A4B;border-color:#fff;color:#fff;font-size:10px;line-height:12px;text-align:center;font-weight:700}
+.lbl{background:rgba(250,248,243,.92);border:0;box-shadow:none;color:#2B4C6D;font-weight:700;font-size:12px;padding:1px 5px;border-radius:4px}
+.lbl.o{font-weight:600;font-size:11px;color:#455A6E}
+.lbl.s{font-size:10px;padding:0 3px;font-weight:600}
+.lbl::before{display:none}
+.badge{background:#2B4C6D;color:#FAF8F3;border-radius:50%;width:22px;height:22px;line-height:22px;text-align:center;font-weight:700;font-size:11px;border:2px solid #FAF8F3}
+.road{color:#7C8A97;font-size:10.5px;font-style:italic;white-space:nowrap;text-shadow:0 0 3px #fff,0 0 3px #fff;pointer-events:none}
+.road span{display:inline-block;transform-origin:center}
+.ckm{background:#3C7A4B;color:#fff;border-radius:50%;width:16px;height:16px;line-height:14px;text-align:center;font-size:10px;font-weight:700;border:1.5px solid #fff}
+.ckm.fix{background:#E98A5F}
+.leaflet-control.locate a{font-size:16px;line-height:30px;font-weight:700}
+#segtable tr.sel td{background:#FFF4D6}
+#printSheet{display:none}
+@media (max-width:900px){.mapgrid{grid-template-columns:1fr}#panel{height:auto;max-height:none}}
+#segtable{max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+#segtable table{margin:0}
+#segtable th{position:sticky;top:0;cursor:pointer}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:1.2em 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:.93rem}
+.card h4{margin:0 0 .3em;color:var(--navy);font-size:1rem}
+.route{display:grid;grid-template-columns:240px 1fr;gap:20px;align-items:start;margin:1.6em 0;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+.route img{width:100%;border-radius:10px}
+.route h4{margin:0 0 .3em;color:var(--navy);font-size:1.1rem}
+.route .meta{color:var(--muted);font-size:.88rem;margin-bottom:.6em}
+footer{background:var(--navy);color:#C9D6E4;padding:36px 0;margin-top:56px;font-size:.88rem}
+footer a{color:var(--sun)}
+ol.refs{font-size:.88rem;padding-left:1.2em}
+ol.refs li{margin-bottom:.4em}
+details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:1em 0}
+summary{cursor:pointer;font-weight:700;color:var(--navy)}
+@media (max-width:700px){.pair,.three{grid-template-columns:1fr}.route{grid-template-columns:1fr}#map{height:440px}}
+@media print{nav.toc,.mapgrid,.controls,#segtable,.legend{display:none}header.hero{padding:24px 0}}
+
+.eq{text-align:center;font-weight:700;color:var(--navy);margin:.6em 0 1em}
+.tcap,figcaption{font-size:.88rem;color:var(--muted)}
+.tcap{margin:1.4em 0 .3em}
+.tcap b,figcaption b{color:var(--navy)}
+figure.single img{margin:0 auto}
+figure .imgs{display:grid;gap:12px}
+figure .imgs.two{grid-template-columns:1fr 1fr}
+section h2{margin-top:.2em}
+.abstract{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 22px}
+.keywords{font-size:.95rem;color:var(--muted)}
+ol.refs li,.refs p{font-size:.95rem}
+#references p{padding-left:1.6em;text-indent:-1.6em;margin:0 0 .5em}
+.livefig{margin:1.4em 0}
+.livefig > figcaption{max-width:780px;margin:.6em auto 0;padding:0 20px}
+@media (max-width:700px){figure .imgs.two{grid-template-columns:1fr}}
+@media print{
+  body{font-size:12pt;line-height:1.5;background:#fff}
+  header.hero{background:#fff;color:var(--ink);padding:0 0 6px}
+  header.hero h1{color:var(--navy);font-size:20pt;margin:.2em 0}
+  header.hero .lede{color:#444;font-size:12pt;margin:0 0 .3em}
+  header.hero .team{color:#444}
+  header.hero .links,nav.toc,.livefig .wide{display:none}
+  section{padding:6px 0 0}
+  .wrap,.wide{max-width:none;padding:0}
+  h2{font-size:15pt;margin:.4em 0 .1em}
+  h3{font-size:12.5pt;margin:.5em 0 .1em}
+  p{margin:0 0 .5em}
+  figure{margin:.6em auto;break-inside:avoid}
+  figure:not(.livefig){max-width:40% !important}
+  figure .imgs.two{grid-template-columns:1fr 1fr}
+
+  table{font-size:9.5pt}
+  th,td{padding:3px 6px}
+  .tcap,figcaption{font-size:9.5pt}
+  .abstract{border:0;padding:0}
+  footer{display:none}
+  #appendix{break-before:page}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kick" style="color:var(--sun)">AR5958A AI for Urban Planning · Group 5 · Final report</div>
+    <h1>Where Do Seniors Walk in the Sun?</h1>
+    <p class="lede">A street-level imagery approach to prioritising sun and rain shelter on older residents’ walking routes in Ang Mo Kio, Singapore</p>
+    <div class="team">Joshi Tejlaxmi · Lu Xuaner · Ng Tsam Yung · Serene Law · Sun Yu · Vedika Gupta</div>
+    <div class="links">
+      <a class="btn" href="#figure-4">Explore the site-check map</a>
+      <a class="btn ghost" href="https://github.com/serenelaww/ar5958a-final-project">GitHub repository</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Sections">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#problem">1 Problem</a></li>
+    <li><a href="#solution">2 Solution</a></li>
+    <li><a href="#method">3 AI methodology</a></li>
+    <li><a href="#demo">4 Prototype and results</a></li>
+    <li><a href="#evaluation">5 Critical evaluation</a></li>
+    <li><a href="#repo">6 Repository</a></li>
+    <li><a href="#references">References</a></li>
+    <li><a href="#appendix">Appendices</a></li>
+  </ul>
+</nav>
+
+<main>
+<section id="abstract"><div class="wrap"><div class="abstract"><h2 style="font-size:1.3rem">Abstract</h2><p>Evidence on pedestrian heat exposure in Singapore is drawn from
+weather stations and satellite imagery, neither of which resolves
+conditions along individual footpaths. This study develops a screening
+method that ranks footpath segments on older residents’ walking routes
+by their exposure to sun and rain. Ten everyday walking routes in Ang Mo
+Kio, totalling 5.8 km, were divided into 134 segments of up to 50 m. A
+pre-trained semantic segmentation model (SegFormer, ADE20K) was applied
+to 360° street-level panoramas to derive sky openness, a proxy for sun
+exposure, which was combined with walking-hour rainfall frequency and
+existing covered-linkway coverage to produce a priority score for each
+segment. The analysis identifies 835 m of high-priority footpath on four
+routes, together with 2.1 km of tree-shaded but uncovered footpath for
+which a covered linkway, rather than additional planting, is the
+appropriate intervention. The town-centre route from Blk 207 is the most
+exposed under all tested variants of the method, whereas the order of
+individual segments is sensitive to the choice of exposure measure. The
+output is therefore intended as a site-check list rather than a
+construction list.</p><p class="keywords"><strong>Keywords:</strong> <em>pedestrian heat exposure; older
+adults; street-view imagery; semantic segmentation; covered linkways;
+Singapore</em></p></div></div></section>
+<section id="problem"><div class="wrap">
+<h2>1. Problem Statement</h2>
+<h3 id="significance">1.1 Significance</h3>
+<p>Ang Mo Kio is one of Singapore’s oldest towns. In June 2026, 41,670
+of its 157,250 residents (26.5%) were aged 65 or older, and the share
+approached 30% in Chong Boon and Townsville, its oldest subzones
+(Department of Statistics Singapore, 2026). Singapore recorded 29 days
+of high heat stress in 2025, and the Ministry of Sustainability and the
+Environment identifies the elderly as a higher-risk group (MSE,
+2026).</p>
+<p>Heat exposure is of particular concern for older pedestrians. Older
+adults can experience physiological heat strain without reporting
+greater discomfort, so resident complaints are an unreliable indicator
+of the most exposed stretches of footpath. Rain is a second form of
+exposure, as wet, uncovered paths increase the risk of slips.</p>
+<h3 id="research-gap">1.2 Research gap</h3>
+<p>Public investment in pedestrian shelter is substantial. The Land
+Transport Authority (LTA) has constructed approximately 186 km of
+covered linkways and plans a further 50 km over five years, and the
+Friendly Streets programme now prioritises areas with larger elderly
+populations (MOT, 2025; LTA, 2025). Sites are selected primarily on the
+basis of distance to transit, pedestrian volume and proximity to
+amenities.</p>
+<p>Evidence at the scale of the individual pedestrian is, however,
+limited. The National Environment Agency (NEA) operates approximately 30
+Wet Bulb Globe Temperature (WBGT) stations island-wide, each located in
+an open setting, while satellite imagery captures rooftops and tree
+crowns rather than conditions at street level. Neither source can
+identify which section of a given walking route leaves a pedestrian
+exposed to direct sun. The problem addressed in this study is therefore
+the absence of footpath-level evidence of sun and rain exposure along
+the routes that older residents walk, during the hours in which they
+walk them.</p>
+<h3 id="intended-users-and-beneficiaries">1.3 Intended users and
+beneficiaries</h3>
+<p>The method is designed as a screening tool for the agencies
+responsible for pedestrian shelter: LTA (covered linkways, Walk2Ride and
+Friendly Streets), the Housing and Development Board (HDB) and the Town
+Council (shelters and links within housing estates), and the National
+Parks Board (NParks), which is responsible for street trees where a roof
+is not required. Final decisions remain with agency engineers following
+site inspection. The intended beneficiaries are the older residents who
+make these journeys daily.</p>
+</div></section>
+<section id="solution"><div class="wrap">
+<h2>2. Proposed Solution</h2>
+<p>This study proposes a ranked shortlist of unsheltered footpath
+segments, scored according to the sun and rain exposure experienced by
+older residents on everyday walking routes. The approach comprises three
+components:</p>
+<ol type="1">
+<li><p><em>Representation of walking routes.</em> Ten common trips were
+mapped from residential blocks to the destinations they serve (Table 1,
+Figure 1) and divided into 134 segments of up to 50 m, allowing exposure
+to be compared at the scale of a single stretch of footpath.</p></li>
+<li><p><em>Measurement of exposure from the pedestrian’s
+perspective.</em> For each segment, the openness of the sky above the
+path is derived from street-level imagery, the frequency of rainfall
+during walking hours is estimated from station records, and existing
+covered-linkway coverage is determined.</p></li>
+<li><p><em>Ranking and explanation.</em> The measures are combined into
+a single priority score and rank, and each segment is tagged with the
+reasons for which a site check is warranted and the type of intervention
+that appears appropriate.</p></li>
+</ol>
+<p>The ranking distinguishes between two types of need. Where a footpath
+is exposed to both sun and rain, a covered linkway is the appropriate
+intervention. Where trees already shade a footpath that has no roof, the
+segment ranks low on sun exposure yet remains exposed to rain; such
+segments are reported separately as linkway candidates so that they are
+not overlooked in a heat-led ranking. The results are presented on an
+interactive site-check map (Section 4).</p>
+<p class="tcap"><b>Table 1.</b> Study routes.</p>
+<div class="tablewrap"><table>
+
+<thead>
+<tr class="header">
+<th><strong>Route</strong></th>
+<th><strong>Origin → destination</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Length (m)</strong></th>
+<th><strong>Segments</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R01</td>
+<td>Blk 612 → Ang Mo Kio Community Hospital</td>
+<td>Healthcare</td>
+<td>595</td>
+<td>13</td>
+</tr>
+<tr class="even">
+<td>R02</td>
+<td>Blk 180 → 628 Market</td>
+<td>Market</td>
+<td>637</td>
+<td>15</td>
+</tr>
+<tr class="odd">
+<td>R03</td>
+<td>Blk 151 → Mayflower MRT</td>
+<td>Transit</td>
+<td>599</td>
+<td>14</td>
+</tr>
+<tr class="even">
+<td>R04</td>
+<td>Blk 244 → Blk 226A–G shops</td>
+<td>Shops</td>
+<td>726</td>
+<td>17</td>
+</tr>
+<tr class="odd">
+<td>R05</td>
+<td>Blk 207 → AMK Town Centre</td>
+<td>Town centre</td>
+<td>677</td>
+<td>15</td>
+</tr>
+<tr class="even">
+<td>R06</td>
+<td>Blk 310C → Blk 338–342 shops</td>
+<td>Shops</td>
+<td>401</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>R07</td>
+<td>Blk 507 → AMK MRT and bus interchange</td>
+<td>Transit</td>
+<td>507</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td>R08</td>
+<td>Blk 522 → Blk 548–555 shops</td>
+<td>Shops</td>
+<td>656</td>
+<td>15</td>
+</tr>
+<tr class="odd">
+<td>R09</td>
+<td>Blk 561 → Blk 525–532 shops</td>
+<td>Shops</td>
+<td>413</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>R10</td>
+<td>Blk 443 → Blk 574 shops</td>
+<td>Shops</td>
+<td>574</td>
+<td>13</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Total</td>
+<td></td>
+<td>5,786</td>
+<td>134</td>
+</tr>
+</tbody>
+</table></div>
+<figure style="max-width:382px;margin-left:auto;margin-right:auto"><div class="imgs"><a href="assets/img/town_routes.png" target="_blank" rel="noopener"><img src="assets/img/town_routes.png" alt="Study routes in Ang Mo Kio. Circles denote origin blocks and squares denote destinations. Land use: URA Master Plan; roads: OpenStreetMap." loading="lazy"></a></div><figcaption><b>Figure 1.</b> Study routes in Ang Mo Kio. Circles denote
+origin blocks and squares denote destinations. Land use: URA Master
+Plan; roads: OpenStreetMap.</figcaption></figure>
+</div></section>
+<section id="method"><div class="wrap">
+<h2>3. AI Methodology</h2>
+<p>Artificial intelligence is confined to the task for which no open
+dataset exists: interpreting what a pedestrian sees from street-level
+images. All subsequent steps consist of arithmetic and GIS operations
+that can be audited by a planner. Table 2 summarises the workflow, and
+the following subsections describe each step and the rationale for its
+selection.</p>
+<p class="tcap"><b>Table 2.</b> Workflow, tools and outputs. Step 2 is the
+only AI step.</p>
+<div class="tablewrap"><table>
+
+<thead>
+<tr class="header">
+<th><strong>Step</strong></th>
+<th><strong>Function</strong></th>
+<th><strong>Tools and data</strong></th>
+<th><strong>Output</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 Imagery</td>
+<td>Retrieves the 360° panorama nearest each segment midpoint; collects
+street photographs for validation</td>
+<td>KartaView API (2022 panoramas); Mapillary (2017 photographs);
+Python</td>
+<td>131 panoramas for 134 segments; 545 photographs</td>
+</tr>
+<tr class="even">
+<td>2 Segmentation (AI)</td>
+<td>Assigns each pixel to a class such as sky, tree, building or
+road</td>
+<td>SegFormer-B0 fine-tuned on ADE20K (Hugging Face, PyTorch)</td>
+<td>Class masks and view factors</td>
+</tr>
+<tr class="odd">
+<td>3 Sky openness</td>
+<td>Computes the sky share of the sky-plus-tree view; set to 0 under a
+linkway roof</td>
+<td>Python (pandas); LTA Covered Linkway layer</td>
+<td>Openness per segment, 0–1</td>
+</tr>
+<tr class="even">
+<td>4 Rain (GIS)</td>
+<td>Estimates walking-hour rainfall frequency, interpolated to segments
+and multiplied by uncovered share</td>
+<td>NEA 5-minute rainfall (data.gov.sg); ArcGIS; Python</td>
+<td>Rain exposure per metre</td>
+</tr>
+<tr class="odd">
+<td>5 Ranking</td>
+<td>Normalises both measures, applies 70/30 weights, ranks, flags and
+tests weights</td>
+<td>Python (integrate_v2.py)</td>
+<td>Rank 1–134, bands, flags</td>
+</tr>
+<tr class="even">
+<td>Validation</td>
+<td>Compares openness with independent measures excluded from the
+score</td>
+<td>Street photographs; two direct-sun models; NEA WBGT</td>
+<td>Correlations, alternative rankings</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="data-open-street-level-imagery">3.1 Data: open street-level
+imagery</h3>
+<p>KartaView 360° panoramas captured in 2022 form the basis of the
+ranking. For each segment midpoint, the nearest panorama with heading
+metadata was retained and rotated to true north using that heading. A
+total of 131 panoramas cover all 134 segments at a median distance of 9
+m from the segment midpoint. Fifteen segments rely on a panorama located
+more than 25 m away; these segments were retained but flagged for site
+verification.</p>
+<p>Mapillary street photographs provide independent validation from a
+second camera. Of 1,447 photographs located near the routes, 545 lying
+on the ten routes were retained, levelled and classified by viewing
+direction (forward, side or rear). Almost all were captured in January
+2017.</p>
+<p>Both sources are openly licensed (CC BY-SA) and can be re-processed
+by an agency at no cost, allowing the method to be applied beyond the
+study area.</p>
+<h3 id="semantic-segmentation">3.2 Semantic segmentation</h3>
+<p>Semantic segmentation was employed to identify the physical elements
+influencing pedestrian exposure to sunlight along the selected walking
+routes. Unlike conventional image classification, which assigns a single
+label to an image, semantic segmentation classifies individual pixels,
+allowing the relative proportions of sky, vegetation, and surrounding
+built structures to be quantified. This provides a consistent method of
+translating street-level imagery into measurable indicators of
+pedestrian exposure.</p>
+<p>The study adopted SegFormer (Xie et al., 2021), a transformer-based
+semantic segmentation model, using its B0 variant pre-trained on the
+ADE20K dataset (Zhou et al., 2017). The model distinguishes 150 semantic
+classes, including sky, trees, buildings, and road surfaces. These were
+consolidated into broader categories relevant to the study: sky, tree or
+vegetation, building, roof, and other solid surfaces. Particular
+emphasis was placed on distinguishing sky from vegetation (Figure 2), as
+their relative proportions form the basis of the sky openness indicator
+used in the subsequent exposure analysis.</p>
+<figure style="max-width:760px;margin-left:auto;margin-right:auto"><div class="imgs two"><a href="assets/img/seg_photo.jpg" target="_blank" rel="noopener"><img src="assets/img/seg_photo.jpg" alt="Mapillary street photograph on R02 (left; January 2017, CC BY-SA 4.0) and the corresponding SegFormer output (right): sky in blue, trees in green, buildings in dark grey, and road and pavement in light grey." loading="lazy"></a><a href="assets/img/seg_mask.png" target="_blank" rel="noopener"><img src="assets/img/seg_mask.png" alt="Mapillary street photograph on R02 (left; January 2017, CC BY-SA 4.0) and the corresponding SegFormer output (right): sky in blue, trees in green, buildings in dark grey, and road and pavement in light grey." loading="lazy"></a></div><figcaption><b>Figure 2.</b> Mapillary street photograph on R02 (left;
+January 2017, CC BY-SA 4.0) and the corresponding SegFormer output
+(right): sky in blue, trees in green, buildings in dark grey, and road
+and pavement in light grey.</figcaption></figure>
+<p>The segmentation workflow involved processing the upper hemisphere of
+each KartaView panorama in four 512 × 512 image tiles. Each tile was
+classified using the pre-trained model to generate pixel-level
+segmentation masks. Black pixels in the original imagery were treated as
+unknown rather than shaded areas to avoid interpreting missing image
+information as physical obstruction. The resulting classifications were
+subsequently used to calculate view factors, accounting for the relative
+contribution of different parts of the visible sky dome.</p>
+<p>SegFormer was selected for its computational efficiency,
+accessibility, and ability to distinguish multiple elements of urban
+streetscapes without additional model training. This was particularly
+relevant given the absence of a locally annotated dataset for
+Singapore’s HDB environments. Although the model could identify
+vegetation and buildings, its recognition of covered walkways and
+smaller overhead structures was less reliable. Consequently,
+segmentation was used primarily to estimate sky and canopy visibility,
+while existing covered-linkway information was obtained separately from
+LTA’s spatial dataset.</p>
+<p>Overall, semantic segmentation provided a reproducible method for
+extracting pedestrian-level environmental characteristics from publicly
+available imagery. Rather than directly predicting thermal comfort, the
+model generates spatial indicators that support the subsequent
+calculation of sky openness and identification of potentially exposed
+footpath segments. The consistency of these measurements was tested
+against a second image source (Section 3.7).</p>
+<h3 id="sky-openness-as-a-proxy-for-sun-exposure">3.3 Sky openness as a
+proxy for sun exposure</h3>
+<p>For each segmented panorama, the proportions of sky, tree and
+building in the upper half of the view were computed, weighted so that
+pixels near the zenith contribute in proportion to their share of the
+sky dome. Sky openness is defined as:</p>
+<p class="eq">openness = sky ÷ (sky + tree)</p>
+<p>A value of 1 indicates a fully open sky and 0 indicates complete
+tree-canopy cover; the classified upward view of the highest-ranked
+segment is shown in Figure 12 (Appendix E). Buildings are excluded from
+the ratio, so that the measure isolates the shade provided by trees
+relative to open sky.</p>
+<p>A separate adjustment was applied for covered linkways. Where the LTA
+covered-linkway layer (LTA DataMall, September 2026) intersects a
+segment (within a 3 m tolerance):</p>
+<p class="eq">effective openness = openness × U</p>
+<p>where U is the proportion of the segment without mapped roof
+coverage. A fully covered segment therefore receives an effective
+openness score of 0.</p>
+<p>An hour-by-hour sun model was also developed (Section 3.7), which
+projects the solar position at each walking hour of 2026 onto each
+north-aligned panorama and classifies the hour as sunlit or shaded. A
+substantial proportion of hours could not be classified, because
+panoramas frequently omit the sky directly overhead; at certain hours,
+fewer than one third of route length had a valid observation. Sky
+openness was therefore adopted because it can be computed for every
+segment, is readily explained and can be validated against a second
+camera, although it describes the sky above a path rather than the
+position of the sun at a given hour.</p>
+<h3 id="rain-exposure">3.4 Rain exposure</h3>
+<p>Covered walkways serve as essential infrastructure for ensuring that
+the elderly can travel safely during rainy weather. This study evaluates
+the level of rain exposure along existing pedestrian routes by
+overlaying rainfall data with the lengths of uncovered sections. The
+analysis utilises rainfall data from the National Environment Agency
+(NEA) and covered walkway data from the Land Transport Authority (LTA),
+processed via overlay analysis in ArcGIS.</p>
+<p>Taking October 2026 as the sample period, a nearest-neighbour
+analysis was employed to identify the three weather stations closest to
+each of the 134 segments, whose rainfall frequencies were blended by
+inverse-distance weighting. The study then calculated the proportion of
+5-minute intervals with recorded rainfall during two specific time
+windows: 07:00–10:00 and 16:00–19:00. The Rain Exposure Score for each
+of the 134 segments was calculated by multiplying the rainfall frequency
+for each segment by its uncovered length (Figure 3); route-level maps
+are provided in Figure 13 (Appendix E).</p>
+<p>Existing LTA covered linkways occur only in short stretches, at both
+ends of R06, near the end of R03, at the start of R08, and on parts of
+R07 (S09–S10, near the bus interchange) and R10 (S02), and do not form a
+continuous covered system. R06 and R10 record the highest rainfall
+frequency, but once cover and length are accounted for, R04 (12.7) and
+R05 (12.4) carry the greatest rain exposure, as they are long and
+entirely uncovered; R07 records the lowest (6.7) owing to the covered
+stretch near the bus interchange. R04 and R05 are therefore the priority
+candidates for improved sheltered connectivity.</p>
+<p>For the ranking, rain exposure is expressed per metre (rainfall
+frequency × uncovered share) rather than as a total, so that segments of
+different lengths can be compared on an equal basis (Section 3.5).</p>
+<figure style="max-width:391px;margin-left:auto;margin-right:auto"><div class="imgs"><a href="assets/img/rain_map.png" target="_blank" rel="noopener"><img src="assets/img/rain_map.png" alt="Rain exposure per segment (darker red indicates greater exposure) and the NEA stations nearest the routes, labelled with the proportion of walking-hour intervals with rainfall." loading="lazy"></a></div><figcaption><b>Figure 3.</b> Rain exposure per segment (darker red
+indicates greater exposure) and the NEA stations nearest the routes,
+labelled with the proportion of walking-hour intervals with
+rainfall.</figcaption></figure>
+<h3 id="ranking">3.5 Ranking</h3>
+<p>Both measures were normalised to the range 0–1 across the 134
+segments (minimum–maximum scaling), so that neither dominates by virtue
+of its units, and combined as follows:</p>
+<p class="eq">priority = 0.7 × openness + 0.3 × rain</p>
+<p>Segments were ranked from 1 to 134 and classified as Low (below 0.4;
+21 segments), Medium (0.4–0.7; 94 segments) or High (0.7 and above; 19
+segments). Route scores are length-weighted means. Each segment
+additionally carries data-quality and intervention flags: panorama
+located more than 25 m away; no LTA linkway present, requiring
+verification of estate shelters; and linkway candidate (openness below
+0.35 with no cover).</p>
+<p>A weighting of 70/30 was adopted for two reasons. First, heat poses
+the greater health risk to older adults. Second, sun exposure varies
+considerably more between segments than rainfall does: the coefficient
+of variation is 48% for openness and 8% for the rainfall rate. Rainfall
+nonetheless distinguishes covered from uncovered segments. As the
+weighting involves judgement, its sensitivity was tested: every
+weighting from 50/50 to 100/0 retains 19 or 20 of the same top 20
+segments, and R05-S02 ranks first in every case (Appendix D).</p>
+<h3 id="heat-context-reference-wbgt-and-direct-sun-exposure">3.6 Heat
+context: reference WBGT and direct-sun exposure</h3>
+<p>The following heat measures do not enter the priority score. They
+establish background heat-stress conditions and provide an independent
+measure of direct sun against which the sky-openness ranking is checked
+(Section 3.7).</p>
+<p>Wet Bulb Globe Temperature (WBGT) data were obtained from the
+National Environment Agency (NEA) via the data.gov.sg API to assess
+background heat-stress conditions during assumed walking periods of
+07:00–10:00 and 16:00–19:00. 15-minute readings from nearby monitoring
+stations at Yio Chu Kang Stadium, Bishan Street and MacRitchie Reservoir
+were aggregated into hourly means. Observations from 5 November 2026
+were used as a supplementary assessment rather than a representation of
+annual heat conditions. The eight hourly reference WBGT measurements
+ranged from 24.13 °C to 28.02 °C, with the highest hourly mean observed
+at 09:00. The morning average was 26.94 °C, compared with 25.08 °C in
+the evening, and no hour reached NEA’s “moderate” threshold of 31 °C
+(Figure 6, Appendix E). These measurements represent heat-stress
+conditions at the monitoring stations, rather than the thermal
+conditions experienced along individual footpaths.</p>
+<p>A separate assessment of direct sunlight was conducted using
+date-specific solar classification for all 134 footpath segments. Each
+observation was classified as sunlit, shaded or unavailable, with
+unknown and night-time classifications excluded. Direct-sun exposure was
+calculated as:</p>
+<p class="eq">direct-sun exposure (%) = (sunlit observations ÷ valid
+observations) × 100</p>
+<p>Segment-level exposure percentages were aggregated into
+length-weighted route means. Of the 1,072 segment-hour records, 798 had
+usable solar classifications. R02 (33.53%), R05 (33.33%) and R04
+(32.17%) had the highest modelled direct-sun exposure, while R01 had the
+lowest (20.67%) (Figure 7, Appendix E).</p>
+<p>The direct-sun assessment supplemented the primary ranking’s
+sky-openness indicator. NEA WBGT observations established reference
+heat-stress conditions during selected walking hours, while modelled
+direct-sun percentages provided an additional measure of spatial
+exposure.</p>
+<h3 id="validation">3.7 Validation</h3>
+<p>As the ranking rests on a single image source and a single proxy, it
+was compared with three independent measures that do not enter the
+score:</p>
+<ul>
+<li><p><em>Second image source.</em> To assess the consistency of the
+segmentation-derived measurements, the approach was also applied to an
+independent set of Mapillary street photographs. Of the 545 photographs
+retained along the study routes, 384 met the validation criteria (within
+20 m of the route and with less than 10% vehicle pixels), covering 66
+segments. Comparison with the KartaView-derived openness measurements
+produced a Pearson correlation of 0.59 and a Spearman correlation of
+0.70, with stronger agreement along R01–R03 (r = 0.81–0.86). These
+results indicate reasonable consistency across image sources, although
+differences in camera perspective, image capture year, and vegetation
+conditions introduce uncertainty.</p></li>
+<li><p><em>Annual shade by hour.</em> For every date in 2026 and each
+walking hour, the solar ray was projected onto the north-aligned
+classified panorama and classified as sunlit, tree-shaded or
+building-shaded. The correlation with openness is r = 0.44, and R05
+records the lowest annual walking-hour shade of any route (64.6%; Figure
+11, Appendix E).</p></li>
+<li><p><em>Single-day direct sun.</em> The direct-sun model for 5
+November 2026 (Section 3.6) correlates with openness at r = 0.27; R02
+(33.5%) and R05 (33.3%) are its most exposed routes.</p></li>
+</ul>
+<p>The NEA WBGT readings reported in Section 3.6 remained below the
+“moderate” threshold throughout the walking hours. As differences
+between footpaths depend on whether direct sun reaches them rather than
+on background temperature, the method ranks exposure rather than
+temperature.</p>
+</div></section>
+<section id="demo"><div class="wrap">
+<h2>4. Prototype and Results</h2>
+<h3 id="project-page-and-site-check-map">4.1 Project page and site-check
+map</h3>
+<p>The results are published on a project landing page that includes an
+interactive map of all 134 segments, coloured by priority score (Figure
+4). It is designed to support site inspections and provides:</p>
+<ul>
+<li><p>Filters by route, priority band, linkway candidacy and a
+site-check list (high priority, linkway candidate, or panorama more than
+25 m away), with labels for origins, destinations, routes, roads and
+segments.</p></li>
+<li><p>A segment panel reporting scores, coverage, coordinates and
+reasons for inspection, with links to Google Maps and Street View and
+navigation along the route.</p></li>
+<li><p>Field-note entry, a downloadable CSV field sheet, a printable
+checklist and geolocation for use on site.</p></li>
+</ul>
+</div>
+<figure class="livefig" id="figure-4"><div class="wide">
+    <div class="controls">
+      <label>Route <select id="fRoute"><option value="">All routes</option></select></label>
+      <label>Priority <select id="fBand"><option value="">All</option><option>High</option><option>Medium</option><option>Low</option></select></label>
+      <label><input type="checkbox" id="fCheck"> Site-check list only</label>
+      <label><input type="checkbox" id="fLink"> Linkway candidates only</label>
+      <span id="count" style="color:var(--muted)"></span>
+    </div>
+    <div class="mapgrid">
+      <div id="map" role="region" aria-label="Interactive site-check map of segment priority scores"></div>
+      <aside id="panel" aria-live="polite">
+        <div id="panelBody"><p class="hint">Click a segment on the map or in the table to see why it is on the list and to record a site check.</p>
+          <p class="hint"><b>Site-check list</b> = high priority (0.7+), a linkway candidate, or scored from a panorama over 25 m away.</p></div>
+      </aside>
+    </div>
+    <div class="legend">
+      <span>Priority score</span><span>0</span><span class="ramp"></span><span>1</span>
+      <span><span class="sw" style="background:#2B4C6D;height:8px;width:26px;box-shadow:0 0 0 2px #4173B0"></span>blue halo = linkway candidate</span>
+      <span>dashed = panorama over 25 m away</span>
+      <span><span class="dot o"></span>home block</span>
+      <span><span class="dot d"></span>destination</span>
+      <span><span class="dot ck">✓</span>site-checked</span>
+    </div>
+    <div class="controls" style="margin-top:1em">
+      <button class="tool" id="bCSV" type="button">Download field sheet (CSV)</button>
+      <button class="tool" id="bPrint" type="button">Print checklist</button>
+      <button class="tool ghost" id="bClear" type="button">Clear my notes</button>
+      <span id="progress" style="color:var(--muted)"></span>
+    </div>
+    <h3 style="margin-top:1.2em">Ranked segments</h3>
+    <div id="segtable"></div>
+    <p style="font-size:.85rem;color:var(--muted);margin-top:.6em">Click a column header to sort, or a row to find it on the map. The field sheet and checklist follow the current filters. Full results: <a href="data/segment_priority_v2.csv">segment_priority_v2.csv</a> · <a href="data/route_priority_v2.csv">route_priority_v2.csv</a></p>
+  </div><figcaption><b>Figure 4.</b> Site-check map. Left: all ten routes with
+labels. Right: R05 filtered to the site-check list, with a selected
+segment and its field-note form.</figcaption></figure>
+<div class="wrap">
+<h3 id="ranking-results">4.2 Ranking results</h3>
+<p>R05, from Blk 207 to the Town Centre, is the most exposed route. Its
+length-weighted openness is 0.84 and its route score 0.85, compared with
+0.58 for the next-ranked routes (R02 and R10). Fourteen of the twenty
+highest-ranked segments lie on R05, three on R10, two on R02 and one on
+R03. The least exposed route is R06 (openness 0.22), which is short and
+lined with trees. Route-level values for all measures are reported in
+Appendix C.</p>
+<h3 id="priorities-for-site-inspection">4.3 Priorities for site
+inspection</h3>
+<p>Nineteen segments score 0.7 or above, comprising 835 m of footpath on
+R05, R10, R02 and R03 (Figure 5, Table 3). In addition, 48 segments
+totalling 2.1 km are shaded by trees but uncovered. Because trees
+already provide shade, these segments rank low overall, yet they offer
+no protection from rain; a covered linkway rather than further planting
+is the appropriate intervention.</p>
+<figure style="max-width:597px;margin-left:auto;margin-right:auto"><div class="imgs"><a href="assets/img/sitecheck_map.png" target="_blank" rel="noopener"><img src="assets/img/sitecheck_map.png" alt="Site-check map. Orange: high priority (score 0.7 and above), dashed where the panorama is more than 25 m away. Dark blue: linkway candidates (shaded but uncovered). Labels indicate the destination served by each route." loading="lazy"></a></div><figcaption><b>Figure 5.</b> Site-check map. Orange: high priority
+(score 0.7 and above), dashed where the panorama is more than 25 m away.
+Dark blue: linkway candidates (shaded but uncovered). Labels indicate
+the destination served by each route.</figcaption></figure>
+<p class="tcap"><b>Table 3.</b> High-priority segments by route.</p>
+<div class="tablewrap"><table>
+
+<thead>
+<tr class="header">
+<th><strong>Route</strong></th>
+<th><strong>Destination</strong></th>
+<th><strong>High-priority segments</strong></th>
+<th><strong>Length</strong></th>
+<th><strong>Note</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R05</td>
+<td>Town Centre</td>
+<td>S01–S06, S08–S15</td>
+<td>627 m</td>
+<td>5 rely on panoramas more than 25 m away</td>
+</tr>
+<tr class="even">
+<td>R10</td>
+<td>Blk 574 shops</td>
+<td>S06, S10–S11</td>
+<td>150 m</td>
+<td>2 rely on panoramas more than 25 m away</td>
+</tr>
+<tr class="odd">
+<td>R02</td>
+<td>628 Market</td>
+<td>S10</td>
+<td>50 m</td>
+<td>Both image sources agree</td>
+</tr>
+<tr class="even">
+<td>R03</td>
+<td>Mayflower MRT</td>
+<td>S14</td>
+<td>8 m</td>
+<td>Station entrance</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="route-level-findings">4.4 Route-level findings</h3>
+<p><em>R05 (Blk 207 → Town Centre; 677 m; no linkway).</em> S02 is the
+most exposed segment in the study area (score 0.96; openness 0.99), and
+S07 is the only shaded stretch. Five segments rely on panoramas 25–29 m
+away, and the 2017 photographs show more tree cover than the 2022
+panoramas; R05 is therefore the first priority for inspection.</p>
+<p><em>R02 (Blk 180 → 628 Market; 637 m; no linkway).</em> An open
+stretch of 350 m (S05–S11) scores 0.64–0.71 (ranks 18–29), whereas S04
+lies under tree cover (rank 122). Both image sources agree, making this
+the best-supported case for shade.</p>
+<p><em>R04 (Blk 244 → Blk 226A–G shops; 726 m, the longest route; no
+linkway).</em> Trees shade S02–S04, S06 and S07, giving a route openness
+of 0.39, and no segment ranks within the top 20. R04 nevertheless
+records the highest rain total of any route. Sun and rain exposure
+therefore diverge: five segments (250 m) are linkway candidates, for
+which a roof rather than additional trees is indicated.</p>
+<p><em>R01 (Blk 612 → Community Hospital; 595 m; no linkway).</em> The
+route is open at both ends (S02 scores 0.64) and tree-lined in its
+middle section (S09 scores 0.32). The open ends warrant shade; the
+middle section warrants a linkway. Route maps for R01, R02, R04 and R05
+are provided in Figures 9 and 10 (Appendix E).</p>
+</div></section>
+<section id="evaluation"><div class="wrap">
+<h2>5. Critical Evaluation</h2>
+<h3 id="robustness-of-results">5.1 Robustness of results</h3>
+<p>The route-level result is robust. R05 is the most exposed route under
+either image source, under every weighting from 50/50 to 100/0, and when
+either direct-sun model is substituted for openness; it also records the
+lowest annual shade in the full-year model. The weighting has little
+effect on the segment shortlist, with 19–20 of the top 20 segments
+retained.</p>
+<p>The segment-level order is less certain. The two image sources agree
+on most routes but diverge on R05, where the 2022 panoramas indicate
+openness of 0.75–0.95 and the 2017 photographs approximately 0.4 (Figure
+8, Appendix E). When photograph-based openness is substituted where
+available, R05 retains 8 rather than 14 of the top 20 segments while
+remaining the highest-ranked route. Substituting a direct-sun model for
+openness retains only 6–7 of the top 20 segments. The moderate
+correlations (r = 0.27–0.44) reflect related but distinct quantities:
+openness describes the whole sky above a path, whereas the direct-sun
+models test a single solar ray at specific hours. The method therefore
+reliably identifies which routes require attention, but individual
+segments must be confirmed on site, which is why the output is framed as
+a site-check list rather than a list of sites for construction.</p>
+<h3 id="limitations">5.2 Limitations</h3>
+<ul>
+<li><p><em>Absence of site verification.</em> No site visits were
+conducted. All results derive from imagery and open data and have not
+been verified on the ground.</p></li>
+<li><p><em>Incomplete shelter data.</em> Only the LTA covered-linkway
+layer was available. HDB and Town Council walkways are not mapped, so
+segments recorded as uncovered are unverified rather than confirmed as
+open.</p></li>
+<li><p><em>Street-level rather than footpath-level imagery.</em> Images
+are captured from the carriageway, at a median distance of 9 m from the
+segment midpoint; 15 panoramas lie more than 25 m away, and panorama
+headings were not verified in the field.</p></li>
+<li><p><em>Temporal mismatch of imagery.</em> Photographs date mainly
+from 2017 and panoramas from 2022; the two disagree on R05, and current
+tree cover has not been verified.</p></li>
+<li><p><em>Model accuracy.</em> SegFormer was not trained on HDB
+estates, its accuracy was not evaluated against manually labelled local
+images, and it rarely identifies linkway roofs, which is why cover is
+taken from the LTA layer.</p></li>
+<li><p><em>Assumed walking hours and a short rainfall record.</em>
+Walking windows of 07:00–10:00 and 16:00–19:00 are assumed rather than
+surveyed, and the rainfall record covers approximately one
+month.</p></li>
+<li><p><em>Exposure rather than temperature.</em> No field WBGT
+measurements were taken; openness is a proxy for sun exposure, and the
+70/30 weighting is a tested judgement.</p></li>
+<li><p><em>Route selection.</em> The ten routes represent common trips
+by older residents but were not sampled from travel data; they
+demonstrate the method rather than provide town-wide coverage.</p></li>
+</ul>
+<h3 id="challenges">5.3 Challenges</h3>
+<p>The principal challenge was the selection of a defensible
+heat-exposure measure. The initial approach, hour-by-hour classification
+of sun and shade from each panorama, could not classify a substantial
+proportion of hours because panoramas omit the sky overhead; sky
+openness was therefore adopted and the hourly models retained for
+validation. Integration also required a common segment geometry across
+six contributors and the reconciliation of imagery from two capture
+years.</p>
+<h3 id="potential-improvements">5.4 Potential improvements</h3>
+<ol type="1">
+<li><p>Inspect the 15 flagged segments and the whole of R05, recording
+cover, tree canopy and surface conditions using the prototype’s field
+sheet.</p></li>
+<li><p>Map HDB and Town Council walkways in collaboration with the Town
+Council, so that uncovered segments can be confirmed.</p></li>
+<li><p>Measure WBGT in the field on high- and low-ranked segments to
+test whether openness corresponds to experienced heat stress.</p></li>
+<li><p>Evaluate model accuracy against manually labelled local images,
+and acquire full-zenith imagery so that every hour can be
+classified.</p></li>
+<li><p>Extend the rainfall record to several years, and base walking
+hours and route selection on survey or travel data for older
+residents.</p></li>
+<li><p>Scale the method: as it relies only on open data, a lead agency
+could apply it town-wide annually or whenever new imagery becomes
+available.</p></li>
+</ol>
+</div></section>
+<section id="repo"><div class="wrap">
+<h2>6. Project Repository</h2>
+<p>All scripts, result tables and the project page are available in the
+GitHub repository: <a href="https://github.com/serenelaww/ar5958a-final-project">https://github.com/serenelaww/ar5958a-final-project</a>.
+The README describes each script and the order in which they are
+executed. Raw imagery and shapefiles are excluded for reasons of size
+and licensing; data sources are listed in Appendix B.</p>
+</div></section>
+<section id="references"><div class="wrap">
+<h2>References</h2>
+<p>Department of Statistics Singapore (2026). Singapore residents by
+planning area, subzone and age group, June 2026.</p>
+<p>Land Transport Authority (2025). Covered linkway and Friendly Streets
+programmes.</p>
+<p>Land Transport Authority. Covered Linkway dataset, LTA DataMall
+(accessed September 2026).</p>
+<p>Ministry of Sustainability and the Environment (2026). Written
+parliamentary reply on heat stress.</p>
+<p>Ministry of Transport (2025). Covered linkway programme
+announcement.</p>
+<p>National Environment Agency. Rainfall (5-minute) and Wet Bulb Globe
+Temperature observations, data.gov.sg.</p>
+<p>Xie, E., Wang, W., Yu, Z., Anandkumar, A., Alvarez, J. M. &amp; Luo,
+P. (2021). SegFormer: Simple and efficient design for semantic
+segmentation with transformers. <em>Advances in Neural Information
+Processing Systems</em>, 34.</p>
+<p>Zhou, B., Zhao, H., Puig, X., Fidler, S., Barriuso, A. &amp;
+Torralba, A. (2017). Scene parsing through ADE20K dataset.
+<em>Proceedings of the IEEE Conference on Computer Vision and Pattern
+Recognition (CVPR)</em>.</p>
+</div></section>
+<section id="appendix"><div class="wrap">
+<h2>Appendices</h2>
+<p class="keywords">Appendices are excluded from the page and word limits.</p>
+<h3 id="appendix-a.-contributions">Appendix A. Contributions</h3>
+<p class="tcap"><b>Table 4.</b> Contributions of group members.</p>
+<div class="tablewrap"><table>
+
+<thead>
+<tr class="header">
+<th><strong>Member</strong></th>
+<th><strong>Contribution</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Serene Law</td>
+<td>Problem framing, ranking and integration, agency analysis,
+presentation and report</td>
+</tr>
+<tr class="even">
+<td>Lu Xuaner</td>
+<td>Street imagery: Mapillary photograph collection, levelling and route
+tagging</td>
+</tr>
+<tr class="odd">
+<td>Vedika Gupta</td>
+<td>Semantic segmentation of street photographs (SegFormer)</td>
+</tr>
+<tr class="even">
+<td>Sun Yu</td>
+<td>360° panorama retrieval, view factors and the shade-by-hour
+model</td>
+</tr>
+<tr class="odd">
+<td>Ng Tsam Yung</td>
+<td>Rain exposure: NEA station rates, covered-linkway overlay and GIS
+route maps</td>
+</tr>
+<tr class="even">
+<td>Joshi Tejlaxmi</td>
+<td>Heat: single-day direct-sun model and NEA WBGT reference</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="appendix-b.-data-sources">Appendix B. Data sources</h3>
+<p class="tcap"><b>Table 5.</b> Datasets used.</p>
+<div class="tablewrap"><table>
+
+<thead>
+<tr class="header">
+<th><strong>Data</strong></th>
+<th><strong>Source and licence</strong></th>
+<th><strong>Use</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>360° panoramas (2022)</td>
+<td>KartaView, CC BY-SA</td>
+<td>Openness for ranking; shade-by-hour model</td>
+</tr>
+<tr class="even">
+<td>Street photographs (2017)</td>
+<td>Mapillary, CC BY-SA 4.0</td>
+<td>Validation</td>
+</tr>
+<tr class="odd">
+<td>Rainfall, 5-minute</td>
+<td>NEA via data.gov.sg</td>
+<td>Rainfall frequency</td>
+</tr>
+<tr class="even">
+<td>WBGT, 15-minute</td>
+<td>NEA via data.gov.sg</td>
+<td>Heat context</td>
+</tr>
+<tr class="odd">
+<td>Covered linkways (Sep 2026)</td>
+<td>LTA DataMall</td>
+<td>Cover per segment</td>
+</tr>
+<tr class="even">
+<td>Land use</td>
+<td>URA Master Plan</td>
+<td>Base maps</td>
+</tr>
+<tr class="odd">
+<td>Buildings, roads</td>
+<td>OpenStreetMap contributors, ODbL</td>
+<td>Route geometry, base maps</td>
+</tr>
+<tr class="even">
+<td>Population by age</td>
+<td>SingStat, June 2026</td>
+<td>Problem context</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="appendix-c.-route-comparison-across-measures">Appendix C. Route
+comparison across measures</h3>
+<p class="tcap"><b>Table 6.</b> Route-level values from the ranking and the
+validation models. Annual shade and direct sun do not enter the
+score.</p>
+<div class="tablewrap"><table>
+
+<thead>
+<tr class="header">
+<th><strong>Route</strong></th>
+<th><strong>Openness</strong></th>
+<th><strong>Rain per m</strong></th>
+<th><strong>Route score</strong></th>
+<th><strong>Rank</strong></th>
+<th><strong>Annual shade</strong></th>
+<th><strong>Direct sun (5 Nov)</strong></th>
+<th><strong>Rain total</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R01</td>
+<td>0.33</td>
+<td>0.0168</td>
+<td>0.47</td>
+<td>6</td>
+<td>74.8%</td>
+<td>20.7%</td>
+<td>10.0</td>
+</tr>
+<tr class="even">
+<td>R02</td>
+<td>0.49</td>
+<td>0.0168</td>
+<td>0.58</td>
+<td>2</td>
+<td>68.2%</td>
+<td>33.5%</td>
+<td>10.7</td>
+</tr>
+<tr class="odd">
+<td>R03</td>
+<td>0.35</td>
+<td>0.0156</td>
+<td>0.44</td>
+<td>8</td>
+<td>71.9%</td>
+<td>24.5%</td>
+<td>9.3</td>
+</tr>
+<tr class="even">
+<td>R04</td>
+<td>0.39</td>
+<td>0.0174</td>
+<td>0.51</td>
+<td>5</td>
+<td>68.2%</td>
+<td>32.2%</td>
+<td>12.7</td>
+</tr>
+<tr class="odd">
+<td>R05</td>
+<td>0.84</td>
+<td>0.0184</td>
+<td>0.85</td>
+<td>1</td>
+<td>64.6%</td>
+<td>33.3%</td>
+<td>12.4</td>
+</tr>
+<tr class="even">
+<td>R06</td>
+<td>0.22</td>
+<td>0.0177</td>
+<td>0.38</td>
+<td>10</td>
+<td>77.0%</td>
+<td>26.5%</td>
+<td>7.1</td>
+</tr>
+<tr class="odd">
+<td>R07</td>
+<td>0.38</td>
+<td>0.0133</td>
+<td>0.39</td>
+<td>9</td>
+<td>74.6%</td>
+<td>29.8%</td>
+<td>6.7</td>
+</tr>
+<tr class="even">
+<td>R08</td>
+<td>0.32</td>
+<td>0.0165</td>
+<td>0.44</td>
+<td>7</td>
+<td>72.7%</td>
+<td>31.9%</td>
+<td>10.9</td>
+</tr>
+<tr class="odd">
+<td>R09</td>
+<td>0.40</td>
+<td>0.0188</td>
+<td>0.54</td>
+<td>4</td>
+<td>69.6%</td>
+<td>27.1%</td>
+<td>7.8</td>
+</tr>
+<tr class="even">
+<td>R10</td>
+<td>0.48</td>
+<td>0.0185</td>
+<td>0.58</td>
+<td>3</td>
+<td>69.2%</td>
+<td>24.8%</td>
+<td>10.6</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="appendix-d.-weight-sensitivity">Appendix D. Weight
+sensitivity</h3>
+<p class="tcap"><b>Table 7.</b> Effect of the heat/rain weighting on the
+top 20 segments.</p>
+<div class="tablewrap"><table>
+
+<thead>
+<tr class="header">
+<th><strong>Heat weight</strong></th>
+<th><strong>Rain weight</strong></th>
+<th><strong>Top-20 overlap with 70/30</strong></th>
+<th><strong>Top segment</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.5</td>
+<td>0.5</td>
+<td>19</td>
+<td>R05-S02</td>
+</tr>
+<tr class="even">
+<td>0.6</td>
+<td>0.4</td>
+<td>20</td>
+<td>R05-S02</td>
+</tr>
+<tr class="odd">
+<td>0.7</td>
+<td>0.3</td>
+<td>20 (default)</td>
+<td>R05-S02</td>
+</tr>
+<tr class="even">
+<td>0.8</td>
+<td>0.2</td>
+<td>19</td>
+<td>R05-S02</td>
+</tr>
+<tr class="odd">
+<td>0.9</td>
+<td>0.1</td>
+<td>19</td>
+<td>R05-S02</td>
+</tr>
+<tr class="even">
+<td>1.0</td>
+<td>0.0</td>
+<td>19</td>
+<td>R05-S02</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="appendix-e.-additional-figures">Appendix E. Additional
+figures</h3>
+<figure style="max-width:760px;margin-left:auto;margin-right:auto"><div class="imgs"><a href="assets/img/wbgt_hourly.png" target="_blank" rel="noopener"><img src="assets/img/wbgt_hourly.png" alt="Hourly mean WBGT observations from three NEA monitoring stations near Ang Mo Kio during the selected walking periods on 5 November 2026. Source: NEA via data.gov.sg." loading="lazy"></a></div><figcaption><b>Figure 6.</b> Hourly mean WBGT observations from three
+NEA monitoring stations near Ang Mo Kio during the selected walking
+periods on 5 November 2026. Source: NEA via data.gov.sg.</figcaption></figure>
+<figure style="max-width:760px;margin-left:auto;margin-right:auto"><div class="imgs"><a href="assets/img/direct_sun_bars.png" target="_blank" rel="noopener"><img src="assets/img/direct_sun_bars.png" alt="Length-weighted modelled direct-sun exposure across the ten Ang Mo Kio walking routes, based on valid hourly solar classifications." loading="lazy"></a></div><figcaption><b>Figure 7.</b> Length-weighted modelled direct-sun
+exposure across the ten Ang Mo Kio walking routes, based on valid hourly
+solar classifications.</figcaption></figure>
+<figure style="max-width:700px;margin-left:auto;margin-right:auto"><div class="imgs"><a href="assets/img/photo_vs_panorama.png" target="_blank" rel="noopener"><img src="assets/img/photo_vs_panorama.png" alt="Openness from 2017 street photographs plotted against 2022 panoramas, one point per segment. Most routes cluster near the diagonal; R05 (orange) lies well below it." loading="lazy"></a></div><figcaption><b>Figure 8.</b> Openness from 2017 street photographs
+plotted against 2022 panoramas, one point per segment. Most routes
+cluster near the diagonal; R05 (orange) lies well below it.</figcaption></figure>
+<figure style="max-width:760px;margin-left:auto;margin-right:auto"><div class="imgs two"><a href="assets/img/R05_map.png" target="_blank" rel="noopener"><img src="assets/img/R05_map.png" alt="Route priority maps for R05 (left) and R02 (right). Colour indicates priority score from low (blue) to high (orange)." loading="lazy"></a><a href="assets/img/R02_map.png" target="_blank" rel="noopener"><img src="assets/img/R02_map.png" alt="Route priority maps for R05 (left) and R02 (right). Colour indicates priority score from low (blue) to high (orange)." loading="lazy"></a></div><figcaption><b>Figure 9.</b> Route priority maps for R05 (left) and R02
+(right). Colour indicates priority score from low (blue) to high
+(orange).</figcaption></figure>
+<figure style="max-width:760px;margin-left:auto;margin-right:auto"><div class="imgs two"><a href="assets/img/R04_map.png" target="_blank" rel="noopener"><img src="assets/img/R04_map.png" alt="Route priority maps for R04 (left) and R01 (right)." loading="lazy"></a><a href="assets/img/R01_map.png" target="_blank" rel="noopener"><img src="assets/img/R01_map.png" alt="Route priority maps for R04 (left) and R01 (right)." loading="lazy"></a></div><figcaption><b>Figure 10.</b> Route priority maps for R04 (left) and
+R01 (right).</figcaption></figure>
+<figure style="max-width:760px;margin-left:auto;margin-right:auto"><div class="imgs"><a href="assets/img/shade_by_hour.png" target="_blank" rel="noopener"><img src="assets/img/shade_by_hour.png" alt="Modelled annual walking-hour shade by hour for each route (validation only)." loading="lazy"></a></div><figcaption><b>Figure 11.</b> Modelled annual walking-hour shade by
+hour for each route (validation only).</figcaption></figure>
+<figure style="max-width:537px;margin-left:auto;margin-right:auto"><div class="imgs"><a href="assets/img/fisheye_R05_S02.png" target="_blank" rel="noopener"><img src="assets/img/fisheye_R05_S02.png" alt="R05-S02, the highest-ranked segment, shown as a classified upward (fisheye) projection of its panorama, consisting almost entirely of sky." loading="lazy"></a></div><figcaption><b>Figure 12.</b> R05-S02, the highest-ranked segment,
+shown as a classified upward (fisheye) projection of its panorama,
+consisting almost entirely of sky.</figcaption></figure>
+<figure style="max-width:760px;margin-left:auto;margin-right:auto"><div class="imgs"><a href="assets/img/flora_route_maps.png" target="_blank" rel="noopener"><img src="assets/img/flora_route_maps.png" alt="Rain exposure analysis for each route (ArcGIS). Route titles corrected for R01, R03 and R09." loading="lazy"></a></div><figcaption><b>Figure 13.</b> Rain exposure analysis for each route
+(ArcGIS). Route titles corrected for R01, R03 and R09.</figcaption></figure>
+<h3 id="appendix-f.-data-dictionary-segment_priority_v2.csv">Appendix F.
+Data dictionary (segment_priority_v2.csv)</h3>
+<p class="tcap"><b>Table 8.</b> Principal columns of the segment results
+table.</p>
+<div class="tablewrap"><table>
+
+<thead>
+<tr class="header">
+<th><strong>Column</strong></th>
+<th><strong>Definition</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>seg_id</td>
+<td>Route and segment identifier, e.g. R05-S02</td>
+</tr>
+<tr class="even">
+<td>openness</td>
+<td>sky ÷ (sky + tree) from the nearest panorama, 0–1</td>
+</tr>
+<tr class="odd">
+<td>covered_share</td>
+<td>Proportion of segment length under an LTA covered linkway</td>
+</tr>
+<tr class="even">
+<td>sun_exposure</td>
+<td>openness × (1 − covered_share)</td>
+</tr>
+<tr class="odd">
+<td>rain_freq</td>
+<td>Proportion of walking-hour 5-minute intervals with rainfall,
+interpolated from the three nearest stations</td>
+</tr>
+<tr class="even">
+<td>rain_per_m</td>
+<td>rain_freq × (1 − covered_share)</td>
+</tr>
+<tr class="odd">
+<td>heat_score, rain_score</td>
+<td>The two measures normalised to 0–1</td>
+</tr>
+<tr class="even">
+<td>priority, rank</td>
+<td>0.7 × heat_score + 0.3 × rain_score; rank 1 = most exposed</td>
+</tr>
+<tr class="odd">
+<td>linkway_candidate</td>
+<td>Openness below 0.35 and no cover</td>
+</tr>
+<tr class="even">
+<td>distance_to_segment_midpoint_m</td>
+<td>Distance from the panorama used to the segment midpoint</td>
+</tr>
+<tr class="odd">
+<td>sun_pct_5nov</td>
+<td>Single-day direct-sun percentage (validation only)</td>
+</tr>
+<tr class="even">
+<td>data_flags</td>
+<td>Reasons for site verification</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="appendix-g.-use-of-ai-tools">Appendix G. Use of AI tools</h3>
+<p>In addition to SegFormer, generative AI assistants (including Claude)
+were used to support the writing and debugging of analysis scripts, the
+drafting and editing of text, and the checking of figures against the
+data. All reported results derive from the scripts and data in the
+repository and were reviewed by group members.</p>
+<h3 id="appendix-h.-imagery-information">Appendix H. Imagery
+information</h3>
+<p class="tcap"><b>Table 9.</b> Mapillary photographs found near each
+route, before filtering (545 were retained for analysis).</p>
+<div class="tablewrap"><table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th><strong>Route</strong></th>
+<th><strong>Origin</strong></th>
+<th><strong>Destination</strong></th>
+<th><strong>Length (m)</strong></th>
+<th><strong>Photographs found</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R01</td>
+<td>Blk 612</td>
+<td>Ang Mo Kio Community Hospital</td>
+<td>595</td>
+<td>358</td>
+</tr>
+<tr class="even">
+<td>R02</td>
+<td>Blk 180</td>
+<td>Ang Mo Kio 628 Market (Blk 628 Ave 4)</td>
+<td>637</td>
+<td>239</td>
+</tr>
+<tr class="odd">
+<td>R03</td>
+<td>Blk 151</td>
+<td>Mayflower MRT Station</td>
+<td>599</td>
+<td>181</td>
+</tr>
+<tr class="even">
+<td>R04</td>
+<td>Blk 244</td>
+<td>HDB neighbourhood centre, Blk 226A–G Ave 1</td>
+<td>726</td>
+<td>109</td>
+</tr>
+<tr class="odd">
+<td>R05</td>
+<td>Blk 207</td>
+<td>AMK Town Centre HDB shops (Ave 6 / Ave 8 / Central 1)</td>
+<td>677</td>
+<td>218</td>
+</tr>
+<tr class="even">
+<td>R06</td>
+<td>Blk 310C</td>
+<td>HDB neighbourhood centre, Blk 338–342 St 31/32</td>
+<td>401</td>
+<td>31</td>
+</tr>
+<tr class="odd">
+<td>R07</td>
+<td>Blk 507</td>
+<td>Ang Mo Kio Bus Interchange / AMK MRT</td>
+<td>507</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>R08</td>
+<td>Blk 522</td>
+<td>HDB shops, Blk 548/554/555 Ave 10</td>
+<td>656</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>R09</td>
+<td>Blk 561</td>
+<td>HDB neighbourhood centre, Blk 525–532 Ave 10</td>
+<td>413</td>
+<td>34</td>
+</tr>
+<tr class="even">
+<td>R10</td>
+<td>Blk 443</td>
+<td>HDB shops, Blk 574 Ave 10</td>
+<td>574</td>
+<td>260</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Total</td>
+<td></td>
+<td>5,786</td>
+<td>1,447</td>
+</tr>
+</tbody>
+</table></div>
+<p>Note on Table 9. Counts are photographs located near each route
+before filtering.</p>
+</div></section>
+</main>
+
+<footer>
+  <div class="wrap">
+    AR5958A AI for Urban Planning, National University of Singapore, AY2026/27 · Group 5.<br>
+    Imagery © KartaView and Mapillary contributors (CC BY-SA). Map data © OpenStreetMap contributors. Rain and WBGT: NEA, data.gov.sg. Linkways: LTA DataMall.<br>
+    <a href="https://github.com/serenelaww/ar5958a-final-project">GitHub repository</a>
+  </div>
+</footer>
+
+<script src="assets/vendor/leaflet/leaflet.js"></script>
+<script src="assets/basemap.js"></script>
+<script src="assets/segments.js"></script>
+<script>
+(function(){
+  var data=window.SEGMENTS; if(!data||!window.L) return;
+  var stops=[[0,[62,111,168]],[0.4,[197,218,236]],[0.7,[237,207,123]],[1,[233,138,95]]];
+  function col(v){for(var i=1;i<stops.length;i++){if(v<=stops[i][0]){var a=stops[i-1],b=stops[i],t=(v-a[0])/(b[0]-a[0]);
+    return 'rgb('+a[1].map(function(c,k){return Math.round(c+(b[1][k]-c)*t)}).join(',')+')'}}return 'rgb(233,138,95)'}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  var DEST={R01:'AMK Community Hospital',R02:'628 Market',R03:'Mayflower MRT',R04:'Blk 226A–G shops',R05:'AMK Town Centre',R06:'Blk 338–342 shops',R07:'AMK MRT & bus interchange',R08:'Blk 548–555 shops',R09:'Blk 525–532 shops',R10:'Blk 574 shops'};
+  var DDIR={R01:'right',R02:'right',R03:'left',R04:'right',R05:'left',R06:'right',R07:'right',R08:'top',R09:'left',R10:'right'};
+
+  /* ---------- notes (kept in this browser only) ---------- */
+  var KEY='g5-sitecheck-v1',notes={};
+  try{notes=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){notes={}}
+  function saveNotes(){try{localStorage.setItem(KEY,JSON.stringify(notes))}catch(e){}}
+  function visited(id){var n=notes[id];return !!(n&&(n.cover||n.trees||n.fix||n.note))}
+
+  /* ---------- derived fields ---------- */
+  var F=data.features.map(function(f){return f.properties});
+  data.features.forEach(function(f){
+    var c=f.geometry.coordinates,p=f.properties,m=c[Math.floor((c.length-1)/2)],n=c[Math.ceil((c.length-1)/2)];
+    p.lat=(m[1]+n[1])/2;p.lon=(m[0]+n[0])/2;p.seq=+p.seg.split('-S')[1];
+    p.far=p.pano!=null&&p.pano>25;
+    p.why=[];if(p.band==='High')p.why.push('High priority (score 0.7+)');if(p.link)p.why.push('Linkway candidate: shaded by trees but uncovered');if(p.far)p.why.push('Panorama '+p.pano+' m away: confirm openness on site');
+    p.check=p.why.length>0;
+  });
+  var byRoute={};F.forEach(function(p){(byRoute[p.route]=byRoute[p.route]||[]).push(p)});
+  Object.keys(byRoute).forEach(function(r){byRoute[r].sort(function(a,b){return a.seq-b.seq})});
+
+  /* ---------- map + basemap ---------- */
+  var map=L.map('map',{scrollWheelZoom:false,maxZoom:19,minZoom:13}).setView([1.369,103.846],15);
+  map.attributionControl.setPrefix(false);
+  map.attributionControl.addAttribution('Land use: URA Master Plan · Buildings and roads © OpenStreetMap contributors');
+  L.control.scale({metric:true,imperial:false,position:'bottomleft'}).addTo(map);
+  var B=window.BASEMAP;
+  if(B){
+    map.createPane('base');map.getPane('base').style.zIndex=250;
+    var cv=L.canvas({padding:0.5,pane:'base'});
+    var landCol={park:'#DCE6D3',open:'#E6EBDD',water:'#C3D7EA',mrt:'#9DB7D6'};
+    L.geoJSON(B.town,{renderer:cv,interactive:false,style:{color:'#56708A',weight:1.2,fill:true,fillColor:'#FAF8F3',fillOpacity:1}}).addTo(map);
+    L.geoJSON(B.land,{renderer:cv,interactive:false,style:function(f){return{stroke:false,fillColor:landCol[f.properties.k],fillOpacity:1}}}).addTo(map);
+    L.geoJSON(B.road,{renderer:cv,interactive:false,style:function(f){return{color:'#FFFFFF',weight:f.properties.w*1.1,opacity:1,lineCap:'round'}}}).addTo(map);
+    L.geoJSON(B.bld,{renderer:cv,interactive:false,style:{stroke:false,fillColor:'#E4E0D6',fillOpacity:1}}).addTo(map);
+    if(B.names){
+      map.createPane('roadnames');map.getPane('roadnames').style.zIndex=380;map.getPane('roadnames').style.pointerEvents='none';
+      var rn=L.layerGroup();
+      B.names.forEach(function(n){var t=n[2].replace('Ang Mo Kio ','AMK ').replace('Avenue','Ave').replace('Street','St').replace(' Road',' Rd').replace('Expressway','Expwy');
+        rn.addLayer(L.marker([n[0],n[1]],{pane:'roadnames',interactive:false,keyboard:false,icon:L.divIcon({className:'road',iconSize:[0,0],html:'<span style="transform:translate(-50%,-50%) rotate('+n[3]+'deg)">'+esc(t)+'</span>'})}))});
+      var syncNames=function(){if(map.getZoom()>=15)rn.addTo(map);else rn.remove()};map.on('zoomend',syncNames);syncNames();
+    }
+  }
+
+  /* ---------- segments ---------- */
+  var halo=L.geoJSON(data,{filter:function(f){return f.properties.link},interactive:false,style:{color:'#4173B0',weight:14,opacity:.55,lineCap:'butt'}}).addTo(map);
+  var layers={};
+  function segStyle(p,sel){return{color:col(p.score),weight:sel?11:(p.band==='High'?8:6),opacity:.95,dashArray:p.far?'7 6':null,lineCap:'round'}}
+  var layer=L.geoJSON(data,{style:function(f){return segStyle(f.properties)},
+    onEachFeature:function(f,l){layers[f.properties.seg]=l;l.bindTooltip(f.properties.seg+' · rank '+f.properties.rank,{sticky:true});l.on('click',function(){select(f.properties.seg,false)})}}).addTo(map);
+  var selRing=null;
+
+  /* ---------- labels: homes, destinations, route badges, segment ids ---------- */
+  var lab=L.layerGroup().addTo(map),segLab=L.layerGroup();
+  Object.keys(byRoute).forEach(function(r){
+    var s=byRoute[r],first=s[0],last=s[s.length-1];
+    var gs=data.features.filter(function(f){return f.properties.route===r}).sort(function(a,b){return a.properties.seq-b.properties.seq});
+    var o=gs[0].geometry.coordinates[0],d=gs[gs.length-1].geometry.coordinates.slice(-1)[0];
+    L.circleMarker([o[1],o[0]],{radius:6,color:'#2B4C6D',weight:2,fillColor:'#FAF8F3',fillOpacity:1}).bindTooltip(esc(first.from),{permanent:true,direction:r==='R09'?'bottom':'left',offset:r==='R09'?[0,6]:[-6,0],className:'lbl o'}).addTo(lab);
+    L.marker([d[1],d[0]],{icon:L.divIcon({className:'',iconSize:[14,14],html:'<div style="width:14px;height:14px;background:#EDCF7B;border:2px solid #2B4C6D;border-radius:2px"></div>'})})
+      .bindTooltip(esc(DEST[r]),{permanent:true,direction:DDIR[r],offset:{left:[-8,0],right:[8,0],top:[0,-8],bottom:[0,8]}[DDIR[r]],className:'lbl'}).addTo(lab);
+    var mid=s[Math.floor(s.length/2)];
+    L.marker([mid.lat,mid.lon],{icon:L.divIcon({className:'',iconSize:[26,26],iconAnchor:[30,13],html:'<div class="badge">'+r.slice(1).replace(/^0/,'')+'</div>'})})
+      .bindTooltip(r+': '+esc(first.from)+' → '+esc(DEST[r]),{direction:'top'}).on('click',function(){document.getElementById('fRoute').value=r;render(true)}).addTo(lab);
+    s.forEach(function(p){segLab.addLayer(L.marker([p.lat,p.lon],{interactive:false,icon:L.divIcon({className:'',iconSize:[0,0],html:''})}).bindTooltip('S'+String(p.seq).padStart(2,'0'),{permanent:true,direction:'right',offset:[6,0],className:'lbl s'}))});
+  });
+  function syncSegLab(){if(map.getZoom()>=17)segLab.addTo(map);else segLab.remove()}
+  map.on('zoomend',syncSegLab);
+
+  /* ---------- checked markers ---------- */
+  var ckLayer=L.layerGroup().addTo(map);
+  function drawChecks(){ckLayer.clearLayers();F.forEach(function(p){if(visited(p.seg)){var n=notes[p.seg],fx=n.fix&&n.fix!=='No action';
+    ckLayer.addLayer(L.marker([p.lat,p.lon],{interactive:false,icon:L.divIcon({className:'',iconSize:[16,16],html:'<div class="ckm'+(fx?' fix':'')+'">✓</div>'})}))}})}
+
+  /* ---------- locate me ---------- */
+  var Loc=L.Control.extend({options:{position:'topleft'},onAdd:function(){var d=L.DomUtil.create('div','leaflet-bar leaflet-control locate');
+    d.innerHTML='<a href="#" title="Show my location" role="button" aria-label="Show my location">◎</a>';
+    L.DomEvent.on(d,'click',function(e){L.DomEvent.preventDefault(e);if(!navigator.geolocation){alertBox('Location is not available in this browser.');return}
+      navigator.geolocation.getCurrentPosition(function(pos){var ll=[pos.coords.latitude,pos.coords.longitude];
+        if(window._me)map.removeLayer(window._me);window._me=L.circleMarker(ll,{radius:8,color:'#fff',weight:3,fillColor:'#2F7DE1',fillOpacity:1}).addTo(map).bindTooltip('You are here');map.setView(ll,18)},
+        function(){alertBox('Could not get your location. Location needs the page to be opened over https (e.g. GitHub Pages) and permission granted.')},{enableHighAccuracy:true,timeout:10000})});
+    return d}});
+  new Loc().addTo(map);
+  function alertBox(t){document.getElementById('panelBody').insertAdjacentHTML('afterbegin','<p class="hint" style="color:#B5532E">'+esc(t)+'</p>')}
+
+  /* ---------- side panel ---------- */
+  var current=null;
+  function opt(v,list){return list.map(function(x){return'<option'+(x===v?' selected':'')+'>'+x+'</option>'}).join('')}
+  function select(id,fly){
+    var p=F.find(function(x){return x.seg===id});if(!p)return;current=id;
+    Object.keys(layers).forEach(function(k){layers[k].setStyle(segStyle(layers[k].feature.properties,k===id))});layers[id].bringToFront();
+    if(fly)map.fitBounds(layers[id].getBounds(),{maxZoom:18,padding:[60,60]});
+    var s=byRoute[p.route],i=s.indexOf(p),prev=s[i-1],next=s[i+1],n=notes[id]||{};
+    var g='https://www.google.com/maps/search/?api=1&query='+p.lat.toFixed(6)+','+p.lon.toFixed(6);
+    var sv='https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+p.lat.toFixed(6)+','+p.lon.toFixed(6);
+    document.getElementById('panelBody').innerHTML=
+      '<h4>'+p.seg+' <span class="pill '+p.band+'">'+p.band+'</span></h4>'+
+      '<div class="sub">'+esc(p.from)+' → '+esc(DEST[p.route])+' · segment '+p.seq+' of '+s.length+'</div>'+
+      '<dl><dt>Rank</dt><dd>'+p.rank+' of 134</dd><dt>Priority score</dt><dd>'+p.score.toFixed(2)+'</dd><dt>Sky openness</dt><dd>'+p.open.toFixed(2)+'</dd>'+
+      '<dt>LTA linkway cover</dt><dd>'+Math.round(p.cover*100)+'%</dd><dt>Length</dt><dd>'+p.len+' m</dd><dt>Panorama distance</dt><dd>'+(p.pano==null?'–':p.pano+' m')+'</dd>'+
+      '<dt>Location</dt><dd>'+p.lat.toFixed(5)+', '+p.lon.toFixed(5)+'</dd></dl>'+
+      (p.why.length?'<b>Why check</b><ul class="why">'+p.why.map(function(w){return'<li>'+esc(w)+'</li>'}).join('')+'</ul>':'<p class="hint">Not on the site-check list.</p>')+
+      '<div class="links"><a href="'+g+'" target="_blank" rel="noopener">Open in Google Maps ↗</a><a href="'+sv+'" target="_blank" rel="noopener">Street View ↗</a></div>'+
+      '<div class="nav"><button class="tool ghost" id="pPrev" type="button"'+(prev?'':' disabled')+'>← '+(prev?prev.seg.split('-')[1]:'start')+'</button><button class="tool ghost" id="pNext" type="button"'+(next?'':' disabled')+'>'+(next?next.seg.split('-')[1]:'end')+' →</button></div>'+
+      '<b>Site check</b>'+
+      '<label for="nCover">Shelter found on site</label><select id="nCover">'+opt(n.cover||'',['','None','Partial','Full (HDB / Town Council)','Full (LTA)'])+'</select>'+
+      '<label for="nTrees">Tree shade over footpath</label><select id="nTrees">'+opt(n.trees||'',['','None','Partial','Full'])+'</select>'+
+      '<label for="nFix">Suggested fix</label><select id="nFix">'+opt(n.fix||'',['','Covered linkway','Shade trees','Both','No action','Unsure'])+'</select>'+
+      '<label for="nNote">Notes (space, obstructions, surface, users seen)</label><textarea id="nNote">'+esc(n.note||'')+'</textarea>'+
+      '<div class="saved" id="nSaved">'+(visited(id)?'Saved in this browser'+(n.t?' · '+esc(n.t):''):'')+'</div>';
+    ['nCover','nTrees','nFix','nNote'].forEach(function(k){document.getElementById(k).addEventListener(k==='nNote'?'input':'change',function(){
+      var o={cover:document.getElementById('nCover').value,trees:document.getElementById('nTrees').value,fix:document.getElementById('nFix').value,note:document.getElementById('nNote').value};
+      o.t=new Date().toLocaleString();if(o.cover||o.trees||o.fix||o.note)notes[id]=o;else delete notes[id];saveNotes();drawChecks();progress();
+      document.getElementById('nSaved').textContent=notes[id]?'Saved in this browser · '+o.t:'';markRow()})});
+    if(prev)document.getElementById('pPrev').onclick=function(){select(prev.seg,true)};
+    if(next)document.getElementById('pNext').onclick=function(){select(next.seg,true)};
+    markRow();document.getElementById('panel').scrollTop=0;
+  }
+
+  /* ---------- filters, table ---------- */
+  var sel=document.getElementById('fRoute');
+  Object.keys(byRoute).sort().forEach(function(r){var o=document.createElement('option');o.value=r;o.textContent=r+' · '+byRoute[r][0].from+' → '+DEST[r];sel.appendChild(o)});
+  var sortKey='rank',sortDir=1,rows=[];
+  var cols=[['rank','Rank',1],['seg','Segment',0],['to','To',0],['len','Length (m)',1],['open','Openness',1],['score','Score',1],['band','Priority',0],['whyS','Why check',0],['stat','Site check',0]];
+  function keep(p){var r=sel.value,b=document.getElementById('fBand').value;return(!r||p.route===r)&&(!b||p.band===b)&&(!document.getElementById('fLink').checked||p.link)&&(!document.getElementById('fCheck').checked||p.check)}
+  function whyShort(p){var w=[];if(p.band==='High')w.push('High');if(p.link)w.push('Linkway');if(p.far)w.push('Far panorama');return w.join(', ')}
+  function stat(p){var n=notes[p.seg];return visited(p.seg)?'✓ '+(n.fix||'checked'):''}
+  function markRow(){document.querySelectorAll('#segtable tr[data-s]').forEach(function(tr){tr.classList.toggle('sel',tr.dataset.s===current);var p=F.find(function(x){return x.seg===tr.dataset.s});tr.lastChild.textContent=stat(p)})}
+  function progress(){var list=F.filter(keep),c=list.filter(function(p){return visited(p.seg)}).length;document.getElementById('progress').textContent='Site-checked: '+c+' of '+list.length+' segments in the current view'}
+  function render(fit){
+    var shown=[];
+    F.forEach(function(p){var l=layers[p.seg],k=keep(p);l.setStyle({opacity:k?.95:.08});if(k)shown.push(l)});
+    halo.eachLayer(function(l){l.setStyle({opacity:keep(l.feature.properties)?.55:0})});
+    F.forEach(function(p){p.whyS=whyShort(p);p.stat=stat(p)});
+    rows=F.filter(keep).sort(function(a,c){var x=a[sortKey],y=c[sortKey];return(x>y?1:x<y?-1:0)*sortDir});
+    document.getElementById('count').textContent=rows.length+' of 134 segments';
+    var h='<table><thead><tr>'+cols.map(function(c){return'<th class="'+(c[2]?'num':'')+'" data-k="'+c[0]+'">'+c[1]+(sortKey===c[0]?(sortDir>0?' ▲':' ▼'):'')+'</th>'}).join('')+'</tr></thead><tbody>';
+    rows.forEach(function(p){h+='<tr data-s="'+p.seg+'" style="cursor:pointer"><td class="num">'+p.rank+'</td><td>'+p.seg+'</td><td>'+esc(DEST[p.route])+'</td><td class="num">'+p.len+'</td><td class="num">'+p.open.toFixed(2)+'</td><td class="num">'+p.score.toFixed(2)+'</td><td><span class="pill '+p.band+'">'+p.band+'</span></td><td>'+p.whyS+'</td><td>'+esc(p.stat)+'</td></tr>'});
+    document.getElementById('segtable').innerHTML=h+'</tbody></table>';
+    document.querySelectorAll('#segtable th').forEach(function(th){th.onclick=function(){var k=th.dataset.k;if(k===sortKey)sortDir*=-1;else{sortKey=k;sortDir=1}render(false)}});
+    document.querySelectorAll('#segtable tr[data-s]').forEach(function(tr){tr.onclick=function(){select(tr.dataset.s,true);var m=document.getElementById('map'),t=m.getBoundingClientRect().top;if(t<0||t>window.innerHeight-200)window.scrollTo({top:t+window.scrollY-80,behavior:'smooth'})}});
+    if(fit&&shown.length)map.fitBounds(L.featureGroup(shown).getBounds(),{padding:[40,40],maxZoom:18});
+    markRow();progress();
+  }
+  ['fRoute','fBand','fLink','fCheck'].forEach(function(id){document.getElementById(id).onchange=function(){render(true)}});
+
+  /* ---------- exports ---------- */
+  function csvCell(v){v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
+  document.getElementById('bCSV').onclick=function(){
+    var head=['rank','segment','route','from','to','length_m','priority','band','openness','lta_cover_pct','panorama_m','why_check','lat','lon','google_maps','shelter_found','tree_shade','suggested_fix','notes','checked_at'];
+    var out=[head.join(',')];
+    rows.slice().sort(function(a,b){return a.route<b.route?-1:a.route>b.route?1:a.seq-b.seq}).forEach(function(p){var n=notes[p.seg]||{};
+      out.push([p.rank,p.seg,p.route,p.from,DEST[p.route],p.len,p.score,p.band,p.open,Math.round(p.cover*100),p.pano,p.why.join('; '),p.lat.toFixed(6),p.lon.toFixed(6),
+        'https://www.google.com/maps/search/?api=1&query='+p.lat.toFixed(6)+','+p.lon.toFixed(6),n.cover,n.trees,n.fix,n.note,n.t].map(csvCell).join(','))});
+    var blob=new Blob(['﻿'+out.join('\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='AMK_site_check_field_sheet.csv';document.body.appendChild(a);a.click();a.remove();
+  };
+  document.getElementById('bPrint').onclick=function(){
+    var list=rows.slice().sort(function(a,b){return a.route<b.route?-1:a.route>b.route?1:a.seq-b.seq});
+    var h='<!doctype html><html><head><meta charset="utf-8"><title>Where Do Seniors Walk in the Sun? · AR5958A Group 5</title><style>body{font:11pt Arial,sans-serif;margin:18mm 12mm;color:#1F2F40}h1{font-size:15pt;margin:0 0 4px}p{margin:0 0 10px;color:#555}table{border-collapse:collapse;width:100%}th,td{border:1px solid #999;padding:4px 6px;vertical-align:top;font-size:9.5pt}th{background:#2B4C6D;color:#fff;text-align:left}tr{page-break-inside:avoid}.bx{white-space:nowrap}.ln{height:28px}h2{font-size:12pt;margin:14px 0 4px;color:#2B4C6D}</style></head><body>'+
+      '<h1>Ang Mo Kio senior walking routes: site-check checklist</h1><p>AR5958A Group 5 · '+list.length+' segments · printed '+new Date().toLocaleDateString()+'. Priority = 0.7 sky openness + 0.3 rain exposure. Tick what you find on site.</p>';
+    var cur='';
+    list.forEach(function(p){if(p.route!==cur){if(cur)h+='</tbody></table>';cur=p.route;h+='<h2>'+p.route+' · '+esc(p.from)+' → '+esc(DEST[p.route])+'</h2><table><thead><tr><th>Seg</th><th>Rank / score</th><th>Why check</th><th>Location</th><th>Shelter</th><th>Trees</th><th>Fix</th><th style="width:28%">Notes</th></tr></thead><tbody>'}
+      var n=notes[p.seg]||{};
+      h+='<tr><td><b>'+p.seq+'</b><br>'+p.len+' m</td><td>'+p.rank+' / '+p.score.toFixed(2)+'<br>'+p.band+'</td><td>'+(p.why.map(esc).join('<br>')||'–')+'</td><td>'+p.lat.toFixed(5)+',<br>'+p.lon.toFixed(5)+'</td>'+
+        '<td class="bx">'+(n.cover?esc(n.cover):'☐ none<br>☐ partial<br>☐ full')+'</td><td class="bx">'+(n.trees?esc(n.trees):'☐ none<br>☐ partial<br>☐ full')+'</td><td class="bx">'+(n.fix?esc(n.fix):'☐ linkway<br>☐ trees<br>☐ none')+'</td><td class="ln">'+esc(n.note||'')+'</td></tr>'});
+    h+='</tbody></table></body></html>';
+    var w=window.open('','_blank');if(!w){alertBox('Allow pop-ups to print the checklist.');return}w.document.write(h);w.document.close();w.focus();setTimeout(function(){w.print()},300);
+  };
+  document.getElementById('bClear').onclick=function(){if(!Object.keys(notes).length)return;if(window.confirm('Delete all site-check notes saved in this browser?')){notes={};saveNotes();drawChecks();render(false);if(current)select(current,false)}};
+
+  drawChecks();render(false);syncSegLab();
+  map.fitBounds(layer.getBounds(),{padding:[20,20]});
+})();
+</script>
+</body>
+</html>
