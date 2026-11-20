@@ -92,7 +92,7 @@ button.tool:disabled{opacity:.4;cursor:default}
 .lbl.s{font-size:10px;padding:0 3px;font-weight:600}
 .lbl::before{display:none}
 .badge{background:#2B4C6D;color:#FAF8F3;border-radius:50%;width:22px;height:22px;line-height:22px;text-align:center;font-weight:700;font-size:11px;border:2px solid #FAF8F3}
-.road{color:#7C8A97;font-size:10.5px;font-style:italic;white-space:nowrap;text-shadow:0 0 3px #fff,0 0 3px #fff;pointer-events:none}
+.road{color:#98A3AE;font-size:10.5px;font-style:italic;white-space:nowrap;text-shadow:0 0 3px #fff,0 0 3px #fff;pointer-events:none}
 .road span{display:inline-block;transform-origin:center}
 .ckm{background:#3C7A4B;color:#fff;border-radius:50%;width:16px;height:16px;line-height:14px;text-align:center;font-size:10px;font-weight:700;border:1.5px solid #fff}
 .ckm.fix{background:#E98A5F}
@@ -1396,7 +1396,7 @@ before filtering.</p>
     return 'rgb('+a[1].map(function(c,k){return Math.round(c+(b[1][k]-c)*t)}).join(',')+')'}}return 'rgb(233,138,95)'}
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
   var DEST={R01:'AMK Community Hospital',R02:'628 Market',R03:'Mayflower MRT',R04:'Blk 226A–G shops',R05:'AMK Town Centre',R06:'Blk 338–342 shops',R07:'AMK MRT & bus interchange',R08:'Blk 548–555 shops',R09:'Blk 525–532 shops',R10:'Blk 574 shops'};
-  var DDIR={R01:'right',R02:'right',R03:'left',R04:'right',R05:'left',R06:'right',R07:'right',R08:'top',R09:'left',R10:'right'};
+  var DDIR={R01:'right',R02:'right',R03:'left',R04:'right',R05:'left',R06:'right',R07:'right',R08:'top',R09:'right',R10:'right'};
 
   /* ---------- notes (kept in this browser only) ---------- */
   var KEY='g5-sitecheck-v1',notes={};
@@ -1433,7 +1433,15 @@ before filtering.</p>
     if(B.names){
       map.createPane('roadnames');map.getPane('roadnames').style.zIndex=380;map.getPane('roadnames').style.pointerEvents='none';
       var rn=L.layerGroup();
-      B.names.forEach(function(n){var t=n[2].replace('Ang Mo Kio ','AMK ').replace('Avenue','Ave').replace('Street','St').replace(' Road',' Rd').replace('Expressway','Expwy');
+      var RV=[];(window.SEGMENTS?window.SEGMENTS.features:[]).forEach(function(ft){ft.geometry.coordinates.forEach(function(c){RV.push(c)})});
+      var KX=111320*Math.cos(1.37*Math.PI/180),KY=110574;
+      function dm(a1,o1,a2,o2){var dx=(o1-o2)*KX,dy=(a1-a2)*KY;return Math.sqrt(dx*dx+dy*dy)}
+      var kept=[];
+      var NAMES=B.names.filter(function(n){
+        for(var i=0;i<RV.length;i++){if(dm(n[0],n[1],RV[i][1],RV[i][0])<90)return false}
+        for(var j=0;j<kept.length;j++){if(kept[j][2]===n[2]&&dm(n[0],n[1],kept[j][0],kept[j][1])<650)return false}
+        kept.push(n);return true});
+      NAMES.forEach(function(n){var t=n[2].replace('Ang Mo Kio ','AMK ').replace('Avenue','Ave').replace('Street','St').replace(' Road',' Rd').replace('Expressway','Expwy');
         rn.addLayer(L.marker([n[0],n[1]],{pane:'roadnames',interactive:false,keyboard:false,icon:L.divIcon({className:'road',iconSize:[0,0],html:'<span style="transform:translate(-50%,-50%) rotate('+n[3]+'deg)">'+esc(t)+'</span>'})}))});
       var syncNames=function(){if(map.getZoom()>=15)rn.addTo(map);else rn.remove()};map.on('zoomend',syncNames);syncNames();
     }
@@ -1566,7 +1574,7 @@ before filtering.</p>
   document.getElementById('bClear').onclick=function(){if(!Object.keys(notes).length)return;if(window.confirm('Delete all site-check notes saved in this browser?')){notes={};saveNotes();drawChecks();render(false);if(current)select(current,false)}};
 
   drawChecks();render(false);syncSegLab();
-  map.fitBounds(layer.getBounds(),{padding:[20,20]});
+  var LB=layer.getBounds();map.fitBounds(LB,{paddingTopLeft:[45,20],paddingBottomRight:[70,20]});if(map.getZoom()<15&&document.getElementById('map').clientWidth>600){var c=LB.getCenter();map.setView([c.lat,c.lng+0.0015],15)}
 })();
 </script>
 </body>
